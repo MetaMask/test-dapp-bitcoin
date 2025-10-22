@@ -1,8 +1,8 @@
 import { type ChangeEvent, type FC, useCallback, useState } from 'react';
+import { useConnect } from '../hooks/useConnect';
+import { useSendPayment } from '../hooks/useSendPayment';
 import { Button } from './Button';
 import { TransactionHash } from './TransactionHash';
-import { useSendPayment } from '../hooks/useSendPayment';
-import { useConnect } from '../hooks/useConnect';
 
 export const SendTestTransaction: FC = () => {
   const sendPayment = useSendPayment();
@@ -30,7 +30,9 @@ export const SendTestTransaction: FC = () => {
    * Sign the transaction.
    */
   const sendTx = useCallback(async () => {
-    if (!address) throw new Error('Wallet not connected');
+    if (!address) {
+      throw new Error('Wallet not connected');
+    }
     setLoading(true);
     try {
       const txId = await sendPayment(toAddress, BigInt(amount));
@@ -44,11 +46,21 @@ export const SendTestTransaction: FC = () => {
     <div>
       <div style={{ marginBottom: '1rem' }}>
         <label htmlFor="address">Destination Address</label>
-        <input type="text" value={toAddress} onChange={handleAddressChange} style={{ width: '90%', padding: '0.5rem', marginTop: '0.5rem' }} />
+        <input
+          type="text"
+          value={toAddress}
+          onChange={handleAddressChange}
+          style={{ width: '90%', padding: '0.5rem', marginTop: '0.5rem' }}
+        />
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <label htmlFor="amount">Amount (sats)</label>
-        <input type="number" value={amount} onChange={handleAmountChange} style={{ width: '90%', padding: '0.5rem', marginTop: '0.5rem' }} />
+        <input
+          type="number"
+          value={amount}
+          onChange={handleAmountChange}
+          style={{ width: '90%', padding: '0.5rem', marginTop: '0.5rem' }}
+        />
       </div>
       <div style={{ display: 'flex', gap: '1rem' }}>
         <Button onClick={sendTx} disabled={!connected || !toAddress || amount <= 0} loading={loading}>

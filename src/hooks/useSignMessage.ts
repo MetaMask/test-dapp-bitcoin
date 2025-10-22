@@ -1,22 +1,60 @@
 import { useCallback } from 'react';
+import { BitcoinNetworkType, signMessage as satsSignMessage } from 'sats-connect';
+import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
-import { useBitcoinWalletCtx } from '../context/BitcoinWalletProvider';
-import { signMessage as satsSignMessage, BitcoinNetworkType } from 'sats-connect';
+import { BitcoinSignMessage, type BitcoinSignMessageFeature } from '../features/signMessage';
+import { useConnect } from './useConnect';
 
 export function useSignMessage() {
   const { network } = useEndpoint();
-  const { address, provider } = useBitcoinWalletCtx();
+  const { selectedConnectionType, statsConnectProvider, selectedWallet, selectedAccount } = useConnect();
 
-  return useCallback(
+  const signMessageWithStandard = useCallback(
     async (message: Uint8Array) => {
-      if (!address) throw new Error('Wallet not connected');
-      if (!provider) throw new Error('Sats Connect provider not available');
+      if (!selectedWallet) {
+        throw new Error('Wallet not connected');
+      }
+      if (!selectedAccount) {
+        throw new Error('Account not selected');
+      }
+
+      // Check if wallet supports bitcoin:signMessage feature
+      const signMessageFeature = selectedWallet.features[BitcoinSignMessage] as
+        | BitcoinSignMessageFeature[typeof BitcoinSignMessage]
+        | undefined;
+      if (!signMessageFeature) {
+        throw new Error('Wallet does not support message signing');
+      }
+
+      try {
+        const result = await signMessageFeature.signMessage({
+          account: selectedAccount,
+          message,
+        });
+
+        return result[0]?.signature;
+      } catch (error) {
+        throw new Error(`Failed to sign message: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+    },
+    [selectedWallet, selectedAccount],
+  );
+
+  const signMessageWithSatsConnect = useCallback(
+    async (message: Uint8Array) => {
+      if (!selectedAccount) {
+        throw new Error('Wallet not connected');
+      }
+      if (!statsConnectProvider) {
+        throw new Error('Sats Connect provider not available');
+      }
+
       const networkType = network === 'bitcoin:mainnet' ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet;
       const res = await new Promise((resolve, reject) =>
         satsSignMessage({
-          getProvider: async () => provider,
+          getProvider: async () => statsConnectProvider,
           payload: {
-            address,
+            address: selectedAccount.address,
             message: Buffer.from(message).toString('utf8'),
             network: { type: networkType },
           },
@@ -26,6 +64,28 @@ export function useSignMessage() {
       );
       return (res as any)?.result?.signature || (res as any)?.signature;
     },
-    [address, provider, network],
+    [selectedAccount, statsConnectProvider, network],
+  );
+
+  return useCallback(
+    async (message: Uint8Array) => {
+      if (!selectedAccount) {
+        throw new Error('Wallet not connected');
+      }
+
+      if (!selectedConnectionType) {
+        throw new Error('Connection type not selected');
+      }
+
+      switch (selectedConnectionType) {
+        case WalletConnectionType.Standard:
+          return signMessageWithStandard(message);
+        case WalletConnectionType.SatsConnect:
+          return signMessageWithSatsConnect(message);
+        default:
+          throw new Error(`Unsupported connection type: ${selectedConnectionType}`);
+      }
+    },
+    [selectedAccount, selectedConnectionType, signMessageWithStandard, signMessageWithSatsConnect],
   );
 }

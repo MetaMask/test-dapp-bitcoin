@@ -1,7 +1,7 @@
-import { type FC } from 'react';
-import { TestPage } from './pages/TestPage';
-import { EndpointProvider } from './context/EndpointProvider';
+import type { FC } from 'react';
 import { BitcoinWalletProvider } from './context/BitcoinWalletProvider';
+import { EndpointProvider } from './context/EndpointProvider';
+import { TestPage } from './pages/TestPage';
 
 const AppContent: FC = () => {
   return (
@@ -25,7 +25,7 @@ const AppContent: FC = () => {
           textAlign: 'center',
         }}
       >
-  <TestPage />
+        <TestPage />
       </div>
     </div>
   );

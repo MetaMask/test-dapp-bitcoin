@@ -10,7 +10,9 @@ interface AccountProps {
  * Get the mempool.space URL for an account based on the selected network
  */
 const getAccountUrl = (network: string, account: string): string => {
-  if (network === 'bitcoin:mainnet') return `https://mempool.space/address/${account}`;
+  if (network === 'bitcoin:mainnet') {
+    return `https://mempool.space/address/${account}`;
+  }
   return `https://mempool.space/testnet/address/${account}`;
 };
 

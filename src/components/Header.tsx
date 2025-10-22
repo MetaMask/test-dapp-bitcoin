@@ -1,8 +1,11 @@
-import { type FC } from 'react';
-import { useConnect } from '../hooks/useConnect';
+import type { FC } from 'react';
+import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
+import { isBitcoinStandardWalletStandardWallet, isBitcoinStatsConnectWalletStandardWallet } from '../features';
+import { useConnect } from '../hooks/useConnect';
 import { dataTestIds } from '../test';
 import { Account } from './Account';
+import { WalletSelectionModal } from './WalletSelectionModal';
 
 type HeaderProps = {};
 
@@ -12,8 +15,50 @@ type HeaderProps = {};
  * Header component
  */
 export const Header: FC<HeaderProps> = () => {
-  const { connect, address, connected, wallets } = useConnect();
+  const {
+    connect,
+    disconnect,
+    selectedAccount,
+    connected,
+    selectedWallet,
+    selectedConnectionType,
+    wallets,
+    isModalOpen,
+    closeModal,
+    connectingWallet,
+  } = useConnect();
   const { network, setNetwork } = useEndpoint();
+
+  const getWalletFeatureLabel = (wallet: any): string => {
+    if (!wallet) {
+      return 'N/A';
+    }
+
+    // If we have a selected connection type, show that specific type
+    if (selectedConnectionType) {
+      if (selectedConnectionType === WalletConnectionType.Standard) {
+        return 'Standard';
+      }
+      if (selectedConnectionType === WalletConnectionType.SatsConnect) {
+        return 'Sats Connect';
+      }
+    }
+
+    // Fallback to detecting all supported types
+    const isStandard = isBitcoinStandardWalletStandardWallet(wallet);
+    const isSatsConnect = isBitcoinStatsConnectWalletStandardWallet(wallet);
+
+    if (isStandard && isSatsConnect) {
+      return 'Standard + Sats Connect';
+    }
+    if (isStandard) {
+      return 'Standard';
+    }
+    if (isSatsConnect) {
+      return 'Sats Connect';
+    }
+    return 'Unknown';
+  };
 
   return (
     <div
@@ -46,25 +91,55 @@ export const Header: FC<HeaderProps> = () => {
         </div>
       </div>
       <div style={{ wordWrap: 'break-word' }}>
-        <strong>Wallet:</strong>
+        <strong>Account:</strong>
         <div>
-          {address ? <Account data-testid={dataTestIds.testPage.header.account} account={address} /> : 'N/A'}
+          {selectedAccount ? (
+            <Account data-testid={dataTestIds.testPage.header.account} account={selectedAccount.address} />
+          ) : (
+            'N/A'
+          )}
         </div>
       </div>
-      <div style={{ wordWrap: 'break-word' }}>
-        <strong>Wallets (Sats Connect):</strong>
+      <div style={{ wordWrap: 'break-word', textAlign: 'center' }}>
+        <strong>Connected Wallet:</strong>
         <div style={{ maxHeight: 140, overflowY: 'auto', marginTop: 4 }}>
-          {wallets.length === 0 && <div style={{ fontSize: 12 }}>Aucun wallet détecté</div>}
-          {wallets.map((w: any) => (
-            <div key={w.name} style={{ fontSize: 12, padding: 2 }}>{w.name}</div>
-          ))}
+          {selectedWallet ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}>
+              <div style={{ fontWeight: 600 }}>{selectedWallet.name}</div>
+              <div
+                style={{
+                  fontSize: '0.875rem',
+                  color: '#6b7280',
+                  backgroundColor: '#f3f4f6',
+                  padding: '2px 8px',
+                  borderRadius: '4px',
+                  display: 'inline-block',
+                }}
+              >
+                {getWalletFeatureLabel(selectedWallet)}
+              </div>
+            </div>
+          ) : (
+            'N/A'
+          )}
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, justifyContent: 'center' }}>
-        <button data-testid={dataTestIds.testPage.header.connect} onClick={connect} disabled={connected}>
-          {connected ? 'Connected' : 'Connect'}
+        <button
+          type="button"
+          data-testid={dataTestIds.testPage.header.connect}
+          onClick={connected ? disconnect : connect}
+        >
+          {connected ? 'Disconnect' : 'Connect'}
         </button>
       </div>
+
+      <WalletSelectionModal
+        isOpen={isModalOpen}
+        wallets={wallets}
+        onClose={closeModal}
+        connectingWallet={connectingWallet}
+      />
     </div>
   );
 };

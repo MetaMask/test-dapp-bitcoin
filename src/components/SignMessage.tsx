@@ -1,12 +1,12 @@
 import { type FC, useCallback, useState } from 'react';
+import { useConnect } from '../hooks/useConnect';
+import { useSignMessage } from '../hooks/useSignMessage';
 import { dataTestIds } from '../test';
 import { Button } from './Button';
-import { useSignMessage } from '../hooks/useSignMessage';
-import { useConnect } from '../hooks/useConnect';
 
 export const SignMessage: FC = () => {
   const signMessage = useSignMessage();
-  const { address } = useConnect();
+  const { selectedAccount } = useConnect();
   const [signedMessage, setSignedMessage] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('Hello, Bitcoin!');
   const [loading, setLoading] = useState(false);
@@ -22,17 +22,19 @@ export const SignMessage: FC = () => {
    * Handle sign message button click.
    */
   const handleSigneMessage = useCallback(async () => {
-    if (!address || !signMessage) throw new Error('Wallet not connected');
+    if (!selectedAccount || !signMessage) {
+      throw new Error('Wallet not connected');
+    }
 
     setLoading(true);
     try {
-  const encoded = new TextEncoder().encode(message);
-  const signature = await signMessage(encoded);
-  setSignedMessage(signature);
+      const encoded = new TextEncoder().encode(message);
+      const signature = await signMessage(encoded);
+      setSignedMessage(signature);
     } finally {
       setLoading(false);
     }
-  }, [address, signMessage, message]);
+  }, [selectedAccount, signMessage, message]);
 
   return (
     <div data-testid={dataTestIds.testPage.signMessage.id}>
@@ -49,7 +51,7 @@ export const SignMessage: FC = () => {
       <Button
         data-testid={dataTestIds.testPage.signMessage.signMessage}
         onClick={handleSigneMessage}
-  disabled={!address}
+        disabled={!selectedAccount}
         loading={loading}
       >
         Sign Message

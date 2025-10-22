@@ -10,7 +10,9 @@ interface TransactionHashProps {
  * Get the mempool.space URL for a transaction hash based on the network
  */
 const getTxUrl = (network: string, hash: string): string => {
-  if (network === 'bitcoin:mainnet') return `https://mempool.space/tx/${hash}`;
+  if (network === 'bitcoin:mainnet') {
+    return `https://mempool.space/tx/${hash}`;
+  }
   return `https://mempool.space/testnet/tx/${hash}`;
 };
 
