@@ -44,5 +44,12 @@ export const dataTestIds = pathifyObject({
       signMessage: true,
       signedMessage: true,
     },
+    signTransaction: {
+      id: true,
+      psbt: true,
+      signTransaction: true,
+      signedPsbt: true,
+      txId: true,
+    },
   },
 } as const);
