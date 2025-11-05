@@ -281,7 +281,7 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
         tabIndex={-1}
       >
         <div style={headerStyle}>
-          <h2 style={titleStyle}>Sélectionner un portefeuille</h2>
+          <h2 style={titleStyle}>Select a wallet</h2>
           <button
             type="button"
             style={closeButtonStyle}
@@ -302,8 +302,8 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
         <div style={bodyStyle}>
           {wallets.length === 0 ? (
             <div style={emptyStyle}>
-              <p style={emptyTextStyle}>Aucun portefeuille disponible</p>
-              <p style={helpTextStyle}>Assurez-vous d'avoir installé un portefeuille Bitcoin compatible</p>
+              <p style={emptyTextStyle}>No wallet available</p>
+              <p style={helpTextStyle}>Make sure you have installed a compatible Bitcoin wallet</p>
             </div>
           ) : (
             <div style={walletListStyle}>
