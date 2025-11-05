@@ -38,6 +38,13 @@ export const dataTestIds = pathifyObject({
       account: true,
       connectionStatus: true,
     },
+    walletSelectionModal: {
+      id: true,
+      walletsList: true,
+      walletOption: true,
+      standardButton: true,
+      satsConnectButton: true,
+    },
     signMessage: {
       id: true,
       message: true,

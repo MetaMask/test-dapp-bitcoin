@@ -3,6 +3,7 @@ import { type CSSProperties, useCallback, useEffect, useState } from 'react';
 import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { isBitcoinStandardWalletStandardWallet, isBitcoinStatsConnectWalletStandardWallet } from '../features';
 import { useConnect } from '../hooks/useConnect';
+import { dataTestIds } from '../test';
 
 // Add spinner animation keyframes to document
 const addSpinnerKeyframes = () => {
@@ -273,6 +274,7 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
       tabIndex={0}
     >
       <div
+        data-testid={dataTestIds.testPage.walletSelectionModal.id}
         style={contentStyle}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
@@ -306,7 +308,7 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
               <p style={helpTextStyle}>Make sure you have installed a compatible Bitcoin wallet</p>
             </div>
           ) : (
-            <div style={walletListStyle}>
+            <div data-testid={dataTestIds.testPage.walletSelectionModal.walletsList} style={walletListStyle}>
               {wallets.map((wallet, index) => {
                 const isConnecting = connectingWallet === wallet;
                 const isDisabled = !!connectingWallet;
@@ -315,6 +317,7 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
                   <div key={`${wallet.name}-${index}`}>
                     {expandedWallet?.name !== wallet.name && (
                       <button
+                        data-testid={dataTestIds.testPage.walletSelectionModal.walletOption}
                         type="button"
                         style={getWalletItemStyle(isDisabled, isConnecting)}
                         onClick={() => handleWalletClick(wallet)}
@@ -354,6 +357,7 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
                       <div style={connectionTypeContainerStyle}>
                         <div style={connectionTypeButtonsStyle}>
                           <button
+                            data-testid={dataTestIds.testPage.walletSelectionModal.standardButton}
                             type="button"
                             style={connectionTypeButtonStyle}
                             onClick={() => handleTypeSelection(wallet, WalletConnectionType.Standard)}
@@ -369,6 +373,7 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
                             Standard
                           </button>
                           <button
+                            data-testid={dataTestIds.testPage.walletSelectionModal.satsConnectButton}
                             type="button"
                             style={connectionTypeButtonStyle}
                             onClick={() => handleTypeSelection(wallet, WalletConnectionType.SatsConnect)}
