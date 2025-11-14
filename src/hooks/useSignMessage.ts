@@ -62,7 +62,7 @@ export function useSignMessage() {
           onCancel: () => reject(new Error('Signature cancelled')),
         }),
       );
-      return (res as any)?.result?.signature || (res as any)?.signature;
+      return res;
     },
     [selectedAccount, statsConnectProvider, network],
   );
