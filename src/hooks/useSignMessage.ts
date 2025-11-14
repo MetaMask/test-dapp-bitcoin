@@ -41,7 +41,7 @@ export function useSignMessage() {
   );
 
   const signMessageWithSatsConnect = useCallback(
-    async (message: Uint8Array) => {
+    async (message: Uint8Array): Promise<string> => {
       if (!selectedAccount) {
         throw new Error('Wallet not connected');
       }
@@ -62,7 +62,7 @@ export function useSignMessage() {
           onCancel: () => reject(new Error('Signature cancelled')),
         }),
       );
-      return res;
+      return res as string;
     },
     [selectedAccount, statsConnectProvider, network],
   );

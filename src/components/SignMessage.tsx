@@ -7,7 +7,7 @@ import { Button } from './Button';
 export const SignMessage: FC = () => {
   const signMessage = useSignMessage();
   const { selectedAccount } = useConnect();
-  const [signedMessage, setSignedMessage] = useState<string | null>(null);
+  const [signedMessage, setSignedMessage] = useState<string | Uint8Array | null>(null);
   const [message, setMessage] = useState<string>('Hello, Bitcoin!');
   const [loading, setLoading] = useState(false);
 
