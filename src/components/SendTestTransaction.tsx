@@ -6,7 +6,8 @@ import { TransactionHash } from './TransactionHash';
 
 export const SendTestTransaction: FC = () => {
   const sendPayment = useSendPayment();
-  const { address, connected } = useConnect();
+  const { selectedAccount, connected } = useConnect();
+  const address = selectedAccount?.address;
   const [transactionHash, setTransactionHash] = useState<string | undefined>();
   const [toAddress, setToAddress] = useState<string>('');
   const [amount, setAmount] = useState<number>(1000); // sats
