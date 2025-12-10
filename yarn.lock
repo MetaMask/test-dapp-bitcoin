@@ -594,6 +594,7 @@ __metadata:
     "@wallet-standard/core": "npm:^1.1.1"
     "@wallet-standard/react": "npm:^1.0.1"
     "@yarnpkg/types": "npm:^4.0.1"
+    bitcoinjs-lib: "npm:^6.1.5"
     buffer: "npm:^6.0.3"
     depcheck: "npm:^1.4.7"
     jsdom: "npm:^26.0.0"
@@ -608,7 +609,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@noble/hashes@npm:^1.1.2":
+"@noble/hashes@npm:^1.1.2, @noble/hashes@npm:^1.2.0":
   version: 1.8.0
   resolution: "@noble/hashes@npm:1.8.0"
   checksum: 10/474b7f56bc6fb2d5b3a42132561e221b0ea4f91e590f4655312ca13667840896b34195e2b53b7f097ec080a1fdd3b58d902c2a8d0fbdf51d2e238b53808a177e
@@ -1691,6 +1692,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base-x@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "base-x@npm:4.0.1"
+  checksum: 10/c9061e576f7376b2bc6b69eca131254bb16ebe1445b535a3f0d68f27524e724965b6c191dffd255bf80f9bdf5eb9d1c8d0320903e83116f2c3e09f81b5ecb6a2
+  languageName: node
+  linkType: hard
+
 "base58-js@npm:^1.0.0":
   version: 1.0.5
   resolution: "base58-js@npm:1.0.5"
@@ -1724,6 +1732,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bip174@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "bip174@npm:2.1.1"
+  checksum: 10/b90da3f9fe5b076a3d7b125a9dd39345a8cd8ece2dcc328a19c92948a60d7242886235bc94712935c71a9c5bc445b98a3570dca8881d19d421fc88a30b150b46
+  languageName: node
+  linkType: hard
+
 "bitcoin-address-validation@npm:2.2.3":
   version: 2.2.3
   resolution: "bitcoin-address-validation@npm:2.2.3"
@@ -1732,6 +1747,20 @@ __metadata:
     bech32: "npm:^2.0.0"
     sha256-uint8array: "npm:^0.10.3"
   checksum: 10/01603b5edf610ecf0843ae546534313f1cffabc8e7435a3678bc9788f18a54e51302218a539794aafd49beb5be70b5d1d507eb7442cb33970fcd665592a71305
+  languageName: node
+  linkType: hard
+
+"bitcoinjs-lib@npm:^6.1.5":
+  version: 6.1.7
+  resolution: "bitcoinjs-lib@npm:6.1.7"
+  dependencies:
+    "@noble/hashes": "npm:^1.2.0"
+    bech32: "npm:^2.0.0"
+    bip174: "npm:^2.1.1"
+    bs58check: "npm:^3.0.1"
+    typeforce: "npm:^1.11.3"
+    varuint-bitcoin: "npm:^1.1.2"
+  checksum: 10/d501b1cd83073ca6bc0cdefb7cf220dde651a49d9b52ba5da3fa6e98b6010f27c0234650dcf7b2285cc93b5e68723654071a6ebbdd3b4252a39022101c7592f2
   languageName: node
   linkType: hard
 
@@ -1872,6 +1901,25 @@ __metadata:
   dependencies:
     pako: "npm:~1.0.5"
   checksum: 10/852e72effdc00bf8acc6d167d835179eda9e5bd13721ae5d0a2d132dc542f33e73bead2959eb43a2f181a9c495bc2ae2bdb4ec37c4e37ff61a0277741cbaaa7a
+  languageName: node
+  linkType: hard
+
+"bs58@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "bs58@npm:5.0.0"
+  dependencies:
+    base-x: "npm:^4.0.0"
+  checksum: 10/2475cb0684e07077521aac718e604a13e0f891d58cff923d437a2f7e9e28703ab39fce9f84c7c703ab369815a675f11e3bd394d38643bfe8969fbe42e6833d45
+  languageName: node
+  linkType: hard
+
+"bs58check@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "bs58check@npm:3.0.1"
+  dependencies:
+    "@noble/hashes": "npm:^1.2.0"
+    bs58: "npm:^5.0.0"
+  checksum: 10/dbbecc7a09f3836e821149266c864c4bbd545539cea43c35f23f4c3c46b54c86c52b65d224b9ea2e916fa6d93bd2ce9fac5b6c6bfcf19621a9c209a5602f71c8
   languageName: node
   linkType: hard
 
@@ -5285,6 +5333,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typeforce@npm:^1.11.3":
+  version: 1.18.0
+  resolution: "typeforce@npm:1.18.0"
+  checksum: 10/dbf98c75b1d57e56e33c1e1271d5505e67981f4e6a2e2e6e8e31160b58777fea1726160810b6c606517db16476805b7dce315926ba2d4859b9a56cab05b7a41f
+  languageName: node
+  linkType: hard
+
 "typescript@npm:~5.6.2":
   version: 5.6.3
   resolution: "typescript@npm:5.6.3"
@@ -5404,6 +5459,15 @@ __metadata:
   version: 5.0.1
   resolution: "validate-npm-package-name@npm:5.0.1"
   checksum: 10/0d583a1af23aeffea7748742cf22b6802458736fb8b60323ba5949763824d46f796474b0e1b9206beb716f9d75269e19dbd7795d6b038b29d561be95dd827381
+  languageName: node
+  linkType: hard
+
+"varuint-bitcoin@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "varuint-bitcoin@npm:1.1.2"
+  dependencies:
+    safe-buffer: "npm:^5.1.1"
+  checksum: 10/1c900bf08f2408ae33a6094dc5d809bdb6673eaf6039062d88c230155873e51e29c760053611f93ccd024854d04ebd92ed95c744720e94a79ca4e1150fcce071
   languageName: node
   linkType: hard
 
