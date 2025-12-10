@@ -422,44 +422,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@exodus/bitcoin-wallet-standard-chains@npm:^0.0.0":
-  version: 0.0.0
-  resolution: "@exodus/bitcoin-wallet-standard-chains@npm:0.0.0"
-  dependencies:
-    "@wallet-standard/base": "npm:^1.0.1"
-  checksum: 10/1193d95599431af7e772eaa1967502871063b1025bfe43443b7c37c0de9fbd6225cf7977a68eef1a43302ede05f0f3a634f01c5e060b53b1e240e8e250a2f156
-  languageName: node
-  linkType: hard
-
-"@exodus/bitcoin-wallet-standard-core@npm:^0.0.0":
-  version: 0.0.0
-  resolution: "@exodus/bitcoin-wallet-standard-core@npm:0.0.0"
-  dependencies:
-    "@exodus/bitcoin-wallet-standard-chains": "npm:^0.0.0"
-    "@exodus/bitcoin-wallet-standard-features": "npm:^0.0.0"
-  checksum: 10/2294b086cba5b8eb0e0880c8e15f44d7c11bb08f314bbeacda50ee7cfbdc464e6aaefe8ab56b1ed527bc7bb4e83f94425e8ee8bd3c92c3c2e5729284a19c9a3f
-  languageName: node
-  linkType: hard
-
-"@exodus/bitcoin-wallet-standard-features@npm:^0.0.0":
-  version: 0.0.0
-  resolution: "@exodus/bitcoin-wallet-standard-features@npm:0.0.0"
-  dependencies:
-    "@wallet-standard/base": "npm:^1.0.1"
-    "@wallet-standard/features": "npm:^1.0.3"
-  checksum: 10/877b9dd4965a6b3bd05c2e06e3af0f3a50467ceb4709a09164679a0e383dbf4817170b2c1b6fd1d1b42f70942fd2b4fcfc52929a8d434d232f333610d182beec
-  languageName: node
-  linkType: hard
-
-"@exodus/bitcoin-wallet-standard@npm:^0.0.0":
-  version: 0.0.0
-  resolution: "@exodus/bitcoin-wallet-standard@npm:0.0.0"
-  dependencies:
-    "@exodus/bitcoin-wallet-standard-core": "npm:^0.0.0"
-  checksum: 10/d723cfc104145334eee7b63afa0698d984b15dc1aae9a3015eb92efd377d4fef765bc6c732582957a3bfa76b1bbac776b2a30384e84266c7ba49160d359361f6
-  languageName: node
-  linkType: hard
-
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -580,7 +542,6 @@ __metadata:
   resolution: "@metamask/test-dapp-bitcoin@workspace:."
   dependencies:
     "@biomejs/biome": "npm:^1.8.3"
-    "@exodus/bitcoin-wallet-standard": "npm:^0.0.0"
     "@lavamoat/allow-scripts": "npm:^3.0.4"
     "@lavamoat/preinstall-always-fail": "npm:^2.0.0"
     "@metamask/auto-changelog": "npm:^5.0.1"
@@ -592,7 +553,6 @@ __metadata:
     "@vitejs/plugin-react-swc": "npm:^3.5.0"
     "@wallet-standard/base": "npm:^1.1.0"
     "@wallet-standard/core": "npm:^1.1.1"
-    "@wallet-standard/react": "npm:^1.0.1"
     "@yarnpkg/types": "npm:^4.0.1"
     buffer: "npm:^6.0.3"
     depcheck: "npm:^1.4.7"
@@ -1347,7 +1307,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wallet-standard/base@npm:1.1.0, @wallet-standard/base@npm:^1.0.1, @wallet-standard/base@npm:^1.1.0":
+"@wallet-standard/base@npm:^1.1.0":
   version: 1.1.0
   resolution: "@wallet-standard/base@npm:1.1.0"
   checksum: 10/11dbb8ed80566265916ab193ad5eab1585d55996781a88039d2bc4480428b1e778901b2dcff3e688dcac7de45e8a9272026f37f07f1e75168caff581906c5079
@@ -1367,7 +1327,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wallet-standard/errors@npm:0.1.1, @wallet-standard/errors@npm:^0.1.1":
+"@wallet-standard/errors@npm:^0.1.1":
   version: 0.1.1
   resolution: "@wallet-standard/errors@npm:0.1.1"
   dependencies:
@@ -1379,102 +1339,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wallet-standard/experimental-features@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@wallet-standard/experimental-features@npm:0.2.0"
-  dependencies:
-    "@wallet-standard/base": "npm:^1.1.0"
-  checksum: 10/b867939311ea969d9c97939cfe7c104932568e0c3b9533fb80fe85bb55937aa0e67e5cf542e4489f556777ca04ea1eb4180be4b4df0d8f5045b0ff4746a5537a
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/features@npm:^1.0.3, @wallet-standard/features@npm:^1.1.0":
+"@wallet-standard/features@npm:^1.1.0":
   version: 1.1.0
   resolution: "@wallet-standard/features@npm:1.1.0"
   dependencies:
     "@wallet-standard/base": "npm:^1.1.0"
   checksum: 10/e046f813ec4bfea172aeb6c11358a962afe8f9a6961453e621d624f89d8b5fc8a44404dacfe18d33be815df6e9117bbf914009f5a9f9ea91ff90a136043fcac8
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/react-core@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@wallet-standard/react-core@npm:1.0.1"
-  dependencies:
-    "@wallet-standard/app": "npm:^1.1.0"
-    "@wallet-standard/base": "npm:^1.1.0"
-    "@wallet-standard/errors": "npm:^0.1.1"
-    "@wallet-standard/experimental-features": "npm:^0.2.0"
-    "@wallet-standard/features": "npm:^1.1.0"
-    "@wallet-standard/ui": "npm:^1.0.1"
-    "@wallet-standard/ui-registry": "npm:^1.0.1"
-  peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
-  checksum: 10/6494e688b9e676743ce84cc01cde533ff1753f6a21b01298bf8628ff59363fffea96329b5e8ee2dc1d5ebeec5477dcfebe0e5e1443ad96018bf68606be549392
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/react@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@wallet-standard/react@npm:1.0.1"
-  dependencies:
-    "@wallet-standard/react-core": "npm:^1.0.1"
-  checksum: 10/0bcaf299c2682ad016b953dd04c1100076ecf11b2c3e2ed9c1df5e22d7bdc29152f16040b09560ce43771372959c5f531f4311594c5604f5ffbf3bdb72dd9637
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/ui-compare@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@wallet-standard/ui-compare@npm:1.0.1"
-  dependencies:
-    "@wallet-standard/base": "npm:1.1.0"
-    "@wallet-standard/ui-core": "npm:1.0.0"
-    "@wallet-standard/ui-registry": "npm:1.0.1"
-  checksum: 10/bb3167fa22bc0553fa2e210ac4d619d918b8f591270d30da52e93db01a4160eef595571c6753809c8f8cbfd77c8b0dd2761e463894c33ab9fa13a9111caab611
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/ui-core@npm:1.0.0, @wallet-standard/ui-core@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@wallet-standard/ui-core@npm:1.0.0"
-  dependencies:
-    "@wallet-standard/base": "npm:1.1.0"
-  checksum: 10/8e7579ec83dbaa0296a8d5d093be05c19f3855896c9c2806e62a620e56e54a724af919d568830187f689cbc517daee312c32cce119fa3601c4c84733f549a7dc
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/ui-features@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@wallet-standard/ui-features@npm:1.0.1"
-  dependencies:
-    "@wallet-standard/base": "npm:1.1.0"
-    "@wallet-standard/errors": "npm:0.1.1"
-    "@wallet-standard/ui-core": "npm:1.0.0"
-    "@wallet-standard/ui-registry": "npm:1.0.1"
-  checksum: 10/2d99debd36dc7fda1cc4c752d05a9a2fc26b112adb69c2ab22e09e637e31436d209b22d1bf4265deb4474157709413c163265daf5fb93463e8027c67ce19951d
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/ui-registry@npm:1.0.1, @wallet-standard/ui-registry@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@wallet-standard/ui-registry@npm:1.0.1"
-  dependencies:
-    "@wallet-standard/base": "npm:1.1.0"
-    "@wallet-standard/errors": "npm:0.1.1"
-    "@wallet-standard/ui-core": "npm:1.0.0"
-  checksum: 10/f53799faaad4ace26a4faa3a67233a630699d3b1895a0274c72b5b84059fbd58276edb5516922d8e52d8fcade9b1254eabf01299cc53b434d61b42d50e7ca621
-  languageName: node
-  linkType: hard
-
-"@wallet-standard/ui@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@wallet-standard/ui@npm:1.0.1"
-  dependencies:
-    "@wallet-standard/ui-compare": "npm:^1.0.1"
-    "@wallet-standard/ui-core": "npm:^1.0.0"
-    "@wallet-standard/ui-features": "npm:^1.0.1"
-  checksum: 10/c35aeba9fbe9e854baf06a518e2dc77293c7476c4fbd5f845f41edc020e49b27ad2ec58cf415ecedbfd659806a9df8484d1b977209117e4a03ecec14213ea3d9
   languageName: node
   linkType: hard
 
@@ -2887,25 +2757,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-intrinsic@npm:^1.2.4, get-intrinsic@npm:^1.2.5, get-intrinsic@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "get-intrinsic@npm:1.3.0"
-  dependencies:
-    call-bind-apply-helpers: "npm:^1.0.2"
-    es-define-property: "npm:^1.0.1"
-    es-errors: "npm:^1.3.0"
-    es-object-atoms: "npm:^1.1.1"
-    function-bind: "npm:^1.1.2"
-    get-proto: "npm:^1.0.1"
-    gopd: "npm:^1.2.0"
-    has-symbols: "npm:^1.1.0"
-    hasown: "npm:^2.0.2"
-    math-intrinsics: "npm:^1.1.0"
-  checksum: 10/6e9dd920ff054147b6f44cb98104330e87caafae051b6d37b13384a45ba15e71af33c3baeac7cb630a0aaa23142718dcf25b45cfdd86c184c5dcb4e56d953a10
-  languageName: node
-  linkType: hard
-
-"get-intrinsic@npm:^1.2.6":
+"get-intrinsic@npm:^1.2.4, get-intrinsic@npm:^1.2.5, get-intrinsic@npm:^1.2.6, get-intrinsic@npm:^1.3.0":
   version: 1.3.1
   resolution: "get-intrinsic@npm:1.3.1"
   dependencies:

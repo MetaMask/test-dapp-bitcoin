@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { expect, test } from 'vitest';
 import { App } from './App';
 
-test('renders learn react link', () => {
+test('renders connect button', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Select Wallet/iu);
-  expect(linkElement).toBeDefined();
+  const connectButton = screen.getByTestId('testpage.header.connect');
+  expect(connectButton).toBeDefined();
+  expect(connectButton.textContent).toBe('Connect');
 });

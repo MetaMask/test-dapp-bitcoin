@@ -24,7 +24,9 @@ export const EndpointProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem(LOCAL_STORAGE_KEY, value);
   };
 
-  return <EndpointContext.Provider value={{ network, setNetwork: handleSetNetwork }}>{children}</EndpointContext.Provider>;
+  return (
+    <EndpointContext.Provider value={{ network, setNetwork: handleSetNetwork }}>{children}</EndpointContext.Provider>
+  );
 };
 
 export const useEndpoint = (): EndpointContextType => {
