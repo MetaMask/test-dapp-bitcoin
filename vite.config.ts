@@ -21,5 +21,6 @@ export default defineConfig({
   test: {
     // 👋 add the line below to add jsdom to vite
     environment: 'jsdom',
+    setupFiles: ['./src/test-setup.ts'],
   },
 } as UserConfig);
