@@ -1,6 +1,6 @@
 {
   "name": "@metamask/test-dapp-bitcoin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "ISC",
   "description": "A test dapp for bitcoin",
   "homepage": "https://metamask.github.io/test-dapp-bitcoin",
