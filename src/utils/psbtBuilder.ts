@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { Psbt, networks, address as btcAddress } from 'bitcoinjs-lib';
+import { Psbt, address as btcAddress, networks } from 'bitcoinjs-lib';
 import type { BitcoinNetwork } from '../context/EndpointProvider';
 
 interface UTXO {
@@ -24,10 +24,16 @@ async function fetchFeeRate(network: BitcoinNetwork, targetBlocks = 3): Promise<
     network === 'bitcoin:mainnet' ? 'https://blockstream.info/api' : 'https://blockstream.info/testnet/api';
   try {
     const res = await fetch(`${baseUrl}/fee-estimates`);
-    if (!res.ok) throw new Error(`fee-estimates ${res.status}`);
+    if (!res.ok) {
+      throw new Error(`fee-estimates ${res.status}`);
+    }
+
     const data = await res.json();
     const rate = data?.[targetBlocks];
-    if (typeof rate === 'number' && isFinite(rate) && rate > 0) return rate;
+
+    if (typeof rate === 'number' && Number.isFinite(rate) && rate > 0) {
+      return rate;
+    }
   } catch (err) {
     console.warn('Falling back to default fee rate:', err);
   }
@@ -187,7 +193,6 @@ export async function buildPSBT(
     changeAmount = 0n;
   }
 
-
   // Create PSBT
   const psbt = new Psbt({ network: bitcoinNetwork });
 
@@ -219,13 +224,13 @@ export async function buildPSBT(
       });
     }
   }
-  
+
   // Add recipient output
   psbt.addOutput({
     address: recipientAddress,
     value: amountSats,
   });
-  
+
   // Add change output (if any)
   if (changeAmount > 0n) {
     psbt.addOutput({
