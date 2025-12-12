@@ -6,6 +6,7 @@ import {
   BitcoinSignAndSendTransaction,
   type BitcoinSignAndSendTransactionFeature,
 } from '../features/signAndSendTransaction';
+import { buildPSBT } from '../utils/psbtBuilder';
 import { useConnect } from './useConnect';
 
 export function useSendPayment() {
@@ -14,7 +15,7 @@ export function useSendPayment() {
   const { selectedConnectionType, selectedWallet } = useConnect();
 
   const sendPaymentWithStandard = useCallback(
-    async (_to: string, _amountSats: bigint) => {
+    async (to: string, amountSats: bigint) => {
       if (!selectedWallet) {
         throw new Error('Wallet not connected');
       }
@@ -30,14 +31,31 @@ export function useSendPayment() {
         throw new Error('Wallet does not support transaction signing and sending');
       }
 
-      // TODO: Implement proper transaction construction for Standard wallets
-      // This would require building a proper PSBT (Partially Signed Bitcoin Transaction)
-      // with the recipient address and amount, which is more complex than Sats Connect
-      throw new Error(
-        'Standard wallet transaction sending not yet implemented. Please use a Sats Connect compatible wallet.',
-      );
+      // Build PSBT
+      const { psbt, inputCount } = await buildPSBT(selectedAccount.address, to, amountSats, network);
+
+      // Prepare inputs to sign - all inputs need to be signed by the sender account
+      const inputsToSign = [
+        {
+          account: selectedAccount,
+          signingIndexes: Array.from({ length: inputCount }, (_, i) => i),
+        },
+      ];
+
+      // Call signAndSendTransaction
+      const result = await signAndSendFeature.signAndSendTransaction({
+        psbt,
+        inputsToSign,
+        chain: network,
+      });
+
+      if (result.length === 0 || !result[0]?.txId) {
+        throw new Error('Transaction failed: no transaction ID returned');
+      }
+
+      return result[0].txId;
     },
-    [selectedWallet, selectedAccount],
+    [selectedWallet, selectedAccount, network],
   );
 
   const sendPaymentWithSatsConnect = useCallback(
