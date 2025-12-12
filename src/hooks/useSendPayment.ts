@@ -7,7 +7,7 @@ import {
   type BitcoinSignAndSendTransactionFeature,
 } from '../features/signAndSendTransaction';
 import { useConnect } from './useConnect';
-import { buildPSBT } from '../utils/psbt';
+import { buildPSBT } from '../utils/psbtBuilder';
 
 export function useSendPayment() {
   const { network } = useEndpoint();

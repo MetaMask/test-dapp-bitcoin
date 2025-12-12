@@ -12,6 +12,27 @@ interface UTXO {
 }
 
 const DUST_THRESHOLD = 546n; // standard relay dust limit for P2PKH
+const DEFAULT_FEE_RATE_SAT_VB = 10; // fallback fee rate when no estimator is used
+const AVERAGE_INPUT_VBYTES = 68; // approximate P2WPKH/P2WSH input weight
+const AVERAGE_OUTPUT_VBYTES = 31; // approximate P2WPKH output weight
+
+/**
+ * Fetch a fee rate (sat/vB) from Blockstream; fallback to DEFAULT_FEE_RATE_SAT_VB on error.
+ */
+async function fetchFeeRate(network: BitcoinNetwork, targetBlocks = 3): Promise<number> {
+  const baseUrl =
+    network === 'bitcoin:mainnet' ? 'https://blockstream.info/api' : 'https://blockstream.info/testnet/api';
+  try {
+    const res = await fetch(`${baseUrl}/fee-estimates`);
+    if (!res.ok) throw new Error(`fee-estimates ${res.status}`);
+    const data = await res.json();
+    const rate = data?.[targetBlocks];
+    if (typeof rate === 'number' && isFinite(rate) && rate > 0) return rate;
+  } catch (err) {
+    console.warn('Falling back to default fee rate:', err);
+  }
+  return DEFAULT_FEE_RATE_SAT_VB;
+}
 
 /**
  * Detect Bitcoin network from address format
@@ -81,16 +102,11 @@ async function fetchUTXOs(address: string, network: BitcoinNetwork): Promise<UTX
 
 /**
  * Estimate transaction fee based on transaction size
- * Using a conservative fee rate of 10 sat/vB
  */
-function estimateFee(inputCount: number, outputCount: number): bigint {
-  // Base transaction size: ~10 bytes
-  // Each input: ~148 bytes (P2PKH) or ~57 bytes (P2WPKH)
-  // Each output: ~34 bytes
-  // Using average input size of ~100 bytes for estimation
-  const estimatedSize = 10 + inputCount * 100 + outputCount * 34;
-  const feeRate = 10; // sat/vB
-  return BigInt(estimatedSize * feeRate);
+function estimateFee(inputCount: number, outputCount: number, feeRate: number = DEFAULT_FEE_RATE_SAT_VB): bigint {
+  // Base transaction size: ~10 vbytes, P2WPKH inputs ~68 vbytes, outputs ~31 vbytes
+  const estimatedVBytes = 10 + inputCount * AVERAGE_INPUT_VBYTES + outputCount * AVERAGE_OUTPUT_VBYTES;
+  return BigInt(Math.ceil(estimatedVBytes * feeRate));
 }
 
 function selectUTXOs(utxos: UTXO[], amountSats: bigint, feeSats: bigint): UTXO[] {
@@ -137,8 +153,10 @@ export async function buildPSBT(
     throw new Error('No UTXOs found for sender address');
   }
 
+  const feeRate = await fetchFeeRate(network);
+
   // Select UTXOs with iterative fee refinement to avoid negative change
-  let feeEstimate = estimateFee(1, 2); // start with 1 input, 2 outputs (recipient + change)
+  let feeEstimate = estimateFee(1, 2, feeRate); // start with 1 input, 2 outputs (recipient + change)
   let selectedUtxos: UTXO[] = [];
   let totalInputValue = 0n;
   let actualFee = 0n;
@@ -147,7 +165,7 @@ export async function buildPSBT(
   while (true) {
     selectedUtxos = selectUTXOs(utxos, amountSats, feeEstimate);
     totalInputValue = selectedUtxos.reduce((sum, utxo) => sum + BigInt(utxo.value), 0n);
-    actualFee = estimateFee(selectedUtxos.length, 2);
+    actualFee = estimateFee(selectedUtxos.length, 2, feeRate);
 
     if (totalInputValue < amountSats + actualFee) {
       // Not enough once the true fee is known; increase estimate and try again
@@ -168,6 +186,7 @@ export async function buildPSBT(
     actualFee += changeAmount;
     changeAmount = 0n;
   }
+
 
   // Create PSBT
   const psbt = new Psbt({ network: bitcoinNetwork });
