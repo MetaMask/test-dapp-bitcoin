@@ -554,6 +554,7 @@ __metadata:
     "@wallet-standard/base": "npm:^1.1.0"
     "@wallet-standard/core": "npm:^1.1.1"
     "@yarnpkg/types": "npm:^4.0.1"
+    bitcoinjs-lib: "npm:^7.0.0"
     buffer: "npm:^6.0.3"
     depcheck: "npm:^1.4.7"
     jsdom: "npm:^26.0.0"
@@ -568,7 +569,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@noble/hashes@npm:^1.1.2":
+"@noble/hashes@npm:^1.1.2, @noble/hashes@npm:^1.2.0":
   version: 1.8.0
   resolution: "@noble/hashes@npm:1.8.0"
   checksum: 10/474b7f56bc6fb2d5b3a42132561e221b0ea4f91e590f4655312ca13667840896b34195e2b53b7f097ec080a1fdd3b58d902c2a8d0fbdf51d2e238b53808a177e
@@ -1561,6 +1562,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base-x@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "base-x@npm:5.0.1"
+  checksum: 10/6e4f847ef842e0a71c6b6020a6ec482a2a5e727f5a98534dbfd5d5a4e8afbc0d1bdf1fd57174b3f0455d107f10a932c3c7710bec07e2878f80178607f8f605c8
+  languageName: node
+  linkType: hard
+
 "base58-js@npm:^1.0.0":
   version: 1.0.5
   resolution: "base58-js@npm:1.0.5"
@@ -1594,6 +1602,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bip174@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "bip174@npm:3.0.0"
+  dependencies:
+    uint8array-tools: "npm:^0.0.9"
+    varuint-bitcoin: "npm:^2.0.0"
+  checksum: 10/b698437e5461cd1f02fc2f24bc074684909cf59ecd85da246000473d88c7a9bf7c2fe62b88ac84af33c3c1c60b17d7a85fb17e5cfa17d0053fb3d9fa0f7ea844
+  languageName: node
+  linkType: hard
+
 "bitcoin-address-validation@npm:2.2.3":
   version: 2.2.3
   resolution: "bitcoin-address-validation@npm:2.2.3"
@@ -1602,6 +1620,21 @@ __metadata:
     bech32: "npm:^2.0.0"
     sha256-uint8array: "npm:^0.10.3"
   checksum: 10/01603b5edf610ecf0843ae546534313f1cffabc8e7435a3678bc9788f18a54e51302218a539794aafd49beb5be70b5d1d507eb7442cb33970fcd665592a71305
+  languageName: node
+  linkType: hard
+
+"bitcoinjs-lib@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "bitcoinjs-lib@npm:7.0.0"
+  dependencies:
+    "@noble/hashes": "npm:^1.2.0"
+    bech32: "npm:^2.0.0"
+    bip174: "npm:^3.0.0"
+    bs58check: "npm:^4.0.0"
+    uint8array-tools: "npm:^0.0.9"
+    valibot: "npm:^0.38.0"
+    varuint-bitcoin: "npm:^2.0.0"
+  checksum: 10/30dbe40e3c2183b3b0b92b9f332be3a44984fd67701570fd99a139e4f0ab5320901bd7d8c5d85e7080d9d6982468dc75ecd085e43c6c8ae3c4d4ee81a05a8709
   languageName: node
   linkType: hard
 
@@ -1742,6 +1775,25 @@ __metadata:
   dependencies:
     pako: "npm:~1.0.5"
   checksum: 10/852e72effdc00bf8acc6d167d835179eda9e5bd13721ae5d0a2d132dc542f33e73bead2959eb43a2f181a9c495bc2ae2bdb4ec37c4e37ff61a0277741cbaaa7a
+  languageName: node
+  linkType: hard
+
+"bs58@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "bs58@npm:6.0.0"
+  dependencies:
+    base-x: "npm:^5.0.0"
+  checksum: 10/7c9bb2b2d93d997a8c652de3510d89772007ac64ee913dc4e16ba7ff47624caad3128dcc7f360763eb6308760c300b3e9fd91b8bcbd489acd1a13278e7949c4e
+  languageName: node
+  linkType: hard
+
+"bs58check@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "bs58check@npm:4.0.0"
+  dependencies:
+    "@noble/hashes": "npm:^1.2.0"
+    bs58: "npm:^6.0.0"
+  checksum: 10/cf5691bdfdf317574f722582360a834f01a36e8f6c850bd5791f04e040b334a0800b7c322ad24c77979c3ed6ef6cf31a6373366b4018223e3005278d491d8799
   languageName: node
   linkType: hard
 
@@ -5157,6 +5209,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uint8array-tools@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "uint8array-tools@npm:0.0.8"
+  checksum: 10/db3310f197a9a728e45e19149e5b222b633622796e5ef621809d03986f4959b2c895f2347c065eb16c89a07033ee8b9222b9abb607283615bdaeb3297dedbf01
+  languageName: node
+  linkType: hard
+
+"uint8array-tools@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "uint8array-tools@npm:0.0.9"
+  checksum: 10/ea924e6d574f8c24d94400f0635eeffbeb0190fd2e4b781bb8e43b089c799a3d8c11c9b75d7c68524bc7e18f7ffc3d942f122ecf729746ba51612a8463848943
+  languageName: node
+  linkType: hard
+
 "undici-types@npm:~6.21.0":
   version: 6.21.0
   resolution: "undici-types@npm:6.21.0"
@@ -5242,6 +5308,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"valibot@npm:^0.38.0":
+  version: 0.38.0
+  resolution: "valibot@npm:0.38.0"
+  peerDependencies:
+    typescript: ">=5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/bde3764ab3314bb39a5935c26d367534c9ead745b3c415650a6e7295633073b51e4e86e34e3b7a7036b0210323bca7720d74d081bcc421b7d8aaf97215dad361
+  languageName: node
+  linkType: hard
+
 "validate-npm-package-license@npm:^3.0.4":
   version: 3.0.4
   resolution: "validate-npm-package-license@npm:3.0.4"
@@ -5256,6 +5334,15 @@ __metadata:
   version: 5.0.1
   resolution: "validate-npm-package-name@npm:5.0.1"
   checksum: 10/0d583a1af23aeffea7748742cf22b6802458736fb8b60323ba5949763824d46f796474b0e1b9206beb716f9d75269e19dbd7795d6b038b29d561be95dd827381
+  languageName: node
+  linkType: hard
+
+"varuint-bitcoin@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "varuint-bitcoin@npm:2.0.0"
+  dependencies:
+    uint8array-tools: "npm:^0.0.8"
+  checksum: 10/059ecf90cf7496e63ff585519873ad4f7b2009f586d3864fda4d02b92aab5af03b58ac518a06e5ae30dff5c5003cd250747a00e92f2cd2ce9fc1e4e16daf1ef1
   languageName: node
   linkType: hard
 
