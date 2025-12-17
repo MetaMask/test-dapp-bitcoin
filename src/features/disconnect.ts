@@ -33,4 +33,4 @@ export type BitcoinDisconnectVersion = '1.0.0';
  *
  * @group Disconnect
  */
-export type BitcoinDisconnectMethod = (options: { revokeSession?: boolean }) => Promise<void>;
+export type BitcoinDisconnectMethod = () => Promise<void>;

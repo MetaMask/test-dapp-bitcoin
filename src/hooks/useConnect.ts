@@ -60,7 +60,7 @@ export function useConnect() {
     setSelectedConnectionType(undefined);
 
     if (isBitcoinStandardWalletStandardWallet(wallet)) {
-      await wallet.features[BitcoinDisconnect].disconnect({ revokeSession: true });
+      await wallet.features[BitcoinDisconnect].disconnect();
     }
   }, [setSelectedWallet, setSatsConnectProvider, setAccounts, setSelectedAccount, setSelectedConnectionType, state]);
 
