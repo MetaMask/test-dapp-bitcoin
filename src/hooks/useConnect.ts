@@ -5,8 +5,8 @@ import { WalletConnectionType, useBitcoinWalletCtx } from '../context/BitcoinWal
 import { useEndpoint } from '../context/EndpointProvider';
 import {
   BitcoinConnect,
-  BitcoinSatsConnect,
   BitcoinDisconnect,
+  BitcoinSatsConnect,
   assertIsBitcoinStandardWalletStandardWallet,
   assertIsBitcoinStatsConnectWalletStandardWallet,
   isBitcoinStandardWalletStandardWallet,
