@@ -6,6 +6,7 @@ import { useEndpoint } from '../context/EndpointProvider';
 import {
   BitcoinConnect,
   BitcoinSatsConnect,
+  BitcoinDisconnect,
   assertIsBitcoinStandardWalletStandardWallet,
   assertIsBitcoinStatsConnectWalletStandardWallet,
   isBitcoinStandardWalletStandardWallet,
