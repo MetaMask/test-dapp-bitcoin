@@ -127,7 +127,7 @@ export const Header: FC<HeaderProps> = () => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, justifyContent: 'center' }}>
         <button
           type="button"
-          data-testid={dataTestIds.testPage.header.connect}
+          data-testid={connected ? dataTestIds.testPage.header.disconnect : dataTestIds.testPage.header.connect}
           onClick={connected ? disconnect : connect}
         >
           {connected ? 'Disconnect' : 'Connect'}
