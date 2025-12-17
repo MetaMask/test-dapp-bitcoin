@@ -45,13 +45,23 @@ export function useConnect() {
     setConnectingWallet(undefined);
   }, []);
 
-  const disconnect = useCallback(() => {
+  const disconnect = useCallback(async () => {
+    const wallet = state.selectedWallet;
+
+    if (!wallet) {
+      throw new Error('No wallet selected');
+    }
+
     setSelectedWallet(undefined);
     setSatsConnectProvider(undefined);
     setAccounts([]);
     setSelectedAccount(undefined);
     setSelectedConnectionType(undefined);
-  }, [setSelectedWallet, setSatsConnectProvider, setAccounts, setSelectedAccount, setSelectedConnectionType]);
+
+    if (isBitcoinStandardWalletStandardWallet(wallet)) {
+      await wallet.features[BitcoinDisconnect].disconnect({ revokeSession: true });
+    }
+  }, [setSelectedWallet, setSatsConnectProvider, setAccounts, setSelectedAccount, setSelectedConnectionType, state]);
 
   const connectWithStandardWallet = useCallback(
     async (wallet: Wallet) => {
