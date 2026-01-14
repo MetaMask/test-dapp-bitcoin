@@ -13,6 +13,10 @@ export declare const dataTestIds: Pathify<{
             readonly disconnect: true;
             readonly account: true;
             readonly connectionStatus: true;
+            readonly networks: {
+                readonly mainnet: true;
+                readonly testnet: true;
+            };
         };
         readonly walletSelectionModal: {
             readonly id: true;
@@ -32,6 +36,13 @@ export declare const dataTestIds: Pathify<{
             readonly psbt: true;
             readonly signTransaction: true;
             readonly signedPsbt: true;
+            readonly txId: true;
+        };
+        readonly sendTransaction: {
+            readonly id: true;
+            readonly recipient: true;
+            readonly amout: true;
+            readonly sendTransaction: true;
             readonly txId: true;
         };
     };
