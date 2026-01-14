@@ -80,8 +80,18 @@ export const Header: FC<HeaderProps> = () => {
           onChange={(e) => setNetwork(e.target.value as any)}
           style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
         >
-          <option value="bitcoin:mainnet">Mainnet</option>
-          <option value="bitcoin:testnet">Testnet</option>
+          <option
+            data-testid={dataTestIds.testPage.header.networks.mainnet}
+            value="bitcoin:mainnet"
+          >
+            Mainnet
+          </option>
+          <option
+            data-testid={dataTestIds.testPage.header.networks.testnet}
+            value="bitcoin:testnet"
+          >
+            Testnet
+          </option>
         </select>
       </div>
       <div style={{ wordWrap: 'break-word' }}>

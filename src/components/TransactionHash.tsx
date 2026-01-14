@@ -4,6 +4,7 @@ import { ExplorerShort } from './ExplorerShort';
 
 interface TransactionHashProps {
   hash: string;
+  dataTestId: string;
 }
 
 /**
@@ -19,7 +20,7 @@ const getTxUrl = (network: string, hash: string): string => {
 /**
  * TransactionHash component
  */
-export const TransactionHash: FC<TransactionHashProps> = ({ hash, ...props }) => {
+export const TransactionHash: FC<TransactionHashProps> = ({ hash, dataTestId, ...props }) => {
   const { network } = useEndpoint();
-  return <ExplorerShort {...props} content={hash} explorerUrl={getTxUrl(network, hash)} />;
+  return <ExplorerShort {...props} dataTestId={dataTestId} content={hash} explorerUrl={getTxUrl(network, hash)} />;
 };
