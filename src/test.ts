@@ -40,7 +40,7 @@ export const dataTestIds = pathifyObject({
       networks: {
         mainnet: true,
         testnet: true,
-      }
+      },
     },
     walletSelectionModal: {
       id: true,
