@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 interface ExplorerShortProps {
   content: string;
   explorerUrl?: string; // kept prop name for minimal diff; represents explorer URL
+  dataTestId?: string;
 }
 
-export const ExplorerShort: FC<ExplorerShortProps> = ({ content, explorerUrl, ...props }) => {
+export const ExplorerShort: FC<ExplorerShortProps> = ({ content, explorerUrl, dataTestId, ...props }) => {
   const [copied, setCopied] = useState(false);
   const [label, setLabel] = useState('');
 
@@ -33,7 +34,7 @@ export const ExplorerShort: FC<ExplorerShortProps> = ({ content, explorerUrl, ..
       }}
     >
       {explorerUrl ? (
-        <a className="content" href={explorerUrl} target="_blank" rel="noopener noreferrer">
+        <a data-testid={dataTestId} className="content" href={explorerUrl} target="_blank" rel="noopener noreferrer">
           {label}
         </a>
       ) : (

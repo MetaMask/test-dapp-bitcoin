@@ -1,6 +1,7 @@
 import { type ChangeEvent, type FC, useCallback, useState } from 'react';
 import { useConnect } from '../hooks/useConnect';
 import { useSendPayment } from '../hooks/useSendPayment';
+import { dataTestIds } from '../test';
 import { Button } from './Button';
 import { TransactionHash } from './TransactionHash';
 
@@ -48,6 +49,7 @@ export const SendTestTransaction: FC = () => {
       <div style={{ marginBottom: '1rem' }}>
         <label htmlFor="address">Destination Address</label>
         <input
+          data-testid={dataTestIds.testPage.sendTransaction.recipient}
           type="text"
           value={toAddress}
           onChange={handleAddressChange}
@@ -57,6 +59,7 @@ export const SendTestTransaction: FC = () => {
       <div style={{ marginBottom: '1rem' }}>
         <label htmlFor="amount">Amount (sats)</label>
         <input
+          data-testid={dataTestIds.testPage.sendTransaction.amout}
           type="number"
           value={amount}
           onChange={handleAmountChange}
@@ -64,7 +67,12 @@ export const SendTestTransaction: FC = () => {
         />
       </div>
       <div style={{ display: 'flex', gap: '1rem' }}>
-        <Button onClick={sendTx} disabled={!connected || !toAddress || amount <= 0} loading={loading}>
+        <Button
+          data-testid={dataTestIds.testPage.sendTransaction.sendTransaction}
+          onClick={sendTx}
+          disabled={!connected || !toAddress || amount <= 0}
+          loading={loading}
+        >
           Send Payment
         </Button>
       </div>
@@ -72,7 +80,7 @@ export const SendTestTransaction: FC = () => {
       {transactionHash && (
         <div style={{ marginTop: '1rem' }}>
           <h3>Transaction</h3>
-          <TransactionHash hash={transactionHash} />
+          <TransactionHash hash={transactionHash} dataTestId={dataTestIds.testPage.sendTransaction.txId} />
         </div>
       )}
     </div>

@@ -37,6 +37,10 @@ export const dataTestIds = pathifyObject({
       disconnect: true,
       account: true,
       connectionStatus: true,
+      networks: {
+        mainnet: true,
+        testnet: true,
+      },
     },
     walletSelectionModal: {
       id: true,
@@ -56,6 +60,13 @@ export const dataTestIds = pathifyObject({
       psbt: true,
       signTransaction: true,
       signedPsbt: true,
+      txId: true,
+    },
+    sendTransaction: {
+      id: true,
+      recipient: true,
+      amout: true,
+      sendTransaction: true,
       txId: true,
     },
   },
