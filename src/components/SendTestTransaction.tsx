@@ -1,9 +1,9 @@
 import { type ChangeEvent, type FC, useCallback, useState } from 'react';
 import { useConnect } from '../hooks/useConnect';
 import { useSendPayment } from '../hooks/useSendPayment';
+import { dataTestIds } from '../test';
 import { Button } from './Button';
 import { TransactionHash } from './TransactionHash';
-import { dataTestIds } from '../test';
 
 export const SendTestTransaction: FC = () => {
   const sendPayment = useSendPayment();
@@ -67,7 +67,12 @@ export const SendTestTransaction: FC = () => {
         />
       </div>
       <div style={{ display: 'flex', gap: '1rem' }}>
-        <Button data-testid={dataTestIds.testPage.sendTransaction.sendTransaction} onClick={sendTx} disabled={!connected || !toAddress || amount <= 0} loading={loading}>
+        <Button
+          data-testid={dataTestIds.testPage.sendTransaction.sendTransaction}
+          onClick={sendTx}
+          disabled={!connected || !toAddress || amount <= 0}
+          loading={loading}
+        >
           Send Payment
         </Button>
       </div>
