@@ -6,12 +6,12 @@ import { useEndpoint } from '../context/EndpointProvider';
 import {
   BitcoinConnect,
   BitcoinDisconnect,
+  BitcoinEvents,
   BitcoinSatsConnect,
   assertIsBitcoinStandardWalletStandardWallet,
   assertIsBitcoinStatsConnectWalletStandardWallet,
   isBitcoinStandardWalletStandardWallet,
   isBitcoinStatsConnectWalletStandardWallet,
-  BitcoinEvents,
 } from '../features';
 
 // Hook exposing state + connect action
@@ -47,13 +47,13 @@ export function useConnect() {
     setConnectingWallet(undefined);
   }, []);
 
-  const resetLocalState = () => {
+  const resetLocalState = useCallback(() => {
     setSelectedWallet(undefined);
     setSatsConnectProvider(undefined);
     setAccounts([]);
     setSelectedAccount(undefined);
     setSelectedConnectionType(undefined);
-  };
+  }, [setSelectedWallet, setSatsConnectProvider, setAccounts, setSelectedAccount, setSelectedConnectionType]);
 
   const disconnect = useCallback(async () => {
     const wallet = state.selectedWallet;
@@ -62,12 +62,12 @@ export function useConnect() {
       throw new Error('No wallet selected');
     }
 
-    resetLocalState()
+    resetLocalState();
 
     if (isBitcoinStandardWalletStandardWallet(wallet)) {
       await wallet.features[BitcoinDisconnect].disconnect();
     }
-  }, [setSelectedWallet, setSatsConnectProvider, setAccounts, setSelectedAccount, setSelectedConnectionType, state]);
+  }, [resetLocalState, state]);
 
   const connectWithStandardWallet = useCallback(
     async (wallet: Wallet) => {
@@ -185,27 +185,33 @@ export function useConnect() {
     [connectWithStandardWallet, connectWithSatsConnectWallet],
   );
 
-  const onChange = useCallback((event: any) => {
-    if(event.accounts.length > 0) {
-      setAccounts(event.accounts);
-      setSelectedAccount(event.accounts[0]);
-    } else {
-      resetLocalState()
-    }
-  }, []);
+  const onChange = useCallback(
+    (event: any) => {
+      if (event.accounts.length > 0) {
+        setAccounts(event.accounts);
+        setSelectedAccount(event.accounts[0]);
+      } else {
+        resetLocalState();
+      }
+    },
+    [setAccounts, setSelectedAccount, resetLocalState],
+  );
 
-  const onChangeAccountSatsConnect = useCallback((event: any) => {
-    if(event.addresses) {
-      const list = (event.addresses || []).map((a: any) => ({ address: a.address, purpose: a.purpose }));
-      setAccounts(list);
-      const derived = list.find((a: any) => a.purpose === 'payment') || list[0] || null;
-      setSelectedAccount(derived);
-    }
-  }, []);
+  const onChangeAccountSatsConnect = useCallback(
+    (event: any) => {
+      if (event.addresses) {
+        const list = (event.addresses || []).map((a: any) => ({ address: a.address, purpose: a.purpose }));
+        setAccounts(list);
+        const derived = list.find((a: any) => a.purpose === 'payment') || list[0] || null;
+        setSelectedAccount(derived);
+      }
+    },
+    [setAccounts, setSelectedAccount],
+  );
 
   const onDisconnectSatsConnect = useCallback(() => {
-    resetLocalState()
-  }, []);
+    resetLocalState();
+  }, [resetLocalState]);
 
   return {
     ...state,
