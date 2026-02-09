@@ -6,13 +6,15 @@ import type { BitcoinSatsConnectFeature } from './satsConnect.js';
 import type { BitcoinSignAndSendTransactionFeature } from './signAndSendTransaction';
 import type { BitcoinSignMessageFeature } from './signMessage';
 import type { BitcoinSignTransactionFeature } from './signTransaction';
+import type { StandardEventsFeature } from './events';
 
 /** Type alias for some or all Bitcoin features. */
 export type BitcoinStandardFeatures = BitcoinConnectFeature &
   BitcoinDisconnectFeature &
   BitcoinSignTransactionFeature &
   BitcoinSignAndSendTransactionFeature &
-  BitcoinSignMessageFeature;
+  BitcoinSignMessageFeature &
+  StandardEventsFeature;
 
 /** Wallet with Bitcoin standard features. */
 export type WalletWithBitcoinStandardFeatures = WalletWithFeatures<BitcoinStandardFeatures>;
@@ -27,3 +29,4 @@ export * from './signAndSendTransaction';
 export * from './signMessage';
 export * from './satsConnect';
 export * from './utils';
+export * from './events';
