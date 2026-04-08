@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { signMessage as satsSignMessage } from 'sats-connect-v3';
 import WalletV4, { BitcoinNetworkType } from 'sats-connect-v4';
-import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import { BitcoinSignMessage, type BitcoinSignMessageFeature } from '../features/signMessage';
+import { WalletConnectionType } from '../types/common';
 import { useConnect } from './useConnect';
 
 export function useSignMessage() {
@@ -109,6 +109,12 @@ export function useSignMessage() {
           throw new Error(`Unsupported connection type: ${selectedConnectionType}`);
       }
     },
-    [selectedAccount, selectedConnectionType, signMessageWithStandard, signMessageWithSatsConnectV3, signMessageWithSatsConnectV4],
+    [
+      selectedAccount,
+      selectedConnectionType,
+      signMessageWithStandard,
+      signMessageWithSatsConnectV3,
+      signMessageWithSatsConnectV4,
+    ],
   );
 }

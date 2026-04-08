@@ -1,9 +1,9 @@
 import type { FC } from 'react';
-import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import { isBitcoinStandardWalletStandardWallet, isBitcoinStatsConnectWalletStandardWallet } from '../features';
 import { useConnect } from '../hooks/useConnect';
 import { dataTestIds } from '../test';
+import { WalletConnectionType } from '../types/common';
 import { Account } from './Account';
 import { WalletSelectionModal } from './WalletSelectionModal';
 

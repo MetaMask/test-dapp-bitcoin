@@ -1,12 +1,13 @@
 import { useCallback } from 'react';
 import { sendBtcTransaction } from 'sats-connect-v3';
 import WalletV4, { BitcoinNetworkType } from 'sats-connect-v4';
-import { WalletConnectionType, useBitcoinWalletCtx } from '../context/BitcoinWalletProvider';
+import { useBitcoinWalletCtx } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import {
   BitcoinSignAndSendTransaction,
   type BitcoinSignAndSendTransactionFeature,
 } from '../features/signAndSendTransaction';
+import { WalletConnectionType } from '../types/common';
 import { buildPSBT } from '../utils/psbtBuilder';
 import { useConnect } from './useConnect';
 
@@ -130,7 +131,13 @@ export function useSendPayment() {
           throw new Error(`Unsupported connection type: ${selectedConnectionType}`);
       }
     },
-    [selectedAccount, selectedConnectionType, sendPaymentWithStandard, sendPaymentWithSatsConnectV3, sendPaymentWithSatsConnectV4],
+    [
+      selectedAccount,
+      selectedConnectionType,
+      sendPaymentWithStandard,
+      sendPaymentWithSatsConnectV3,
+      sendPaymentWithSatsConnectV4,
+    ],
   );
 }
 

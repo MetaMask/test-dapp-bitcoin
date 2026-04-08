@@ -2,7 +2,7 @@ import type { Wallet } from '@wallet-standard/base';
 import { useCallback, useState } from 'react';
 import { getAddress } from 'sats-connect-v3';
 import WalletV4, { AddressPurpose, BitcoinNetworkType } from 'sats-connect-v4';
-import { WalletConnectionType, useBitcoinWalletCtx } from '../context/BitcoinWalletProvider';
+import { useBitcoinWalletCtx } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import {
   BitcoinConnect,
@@ -14,6 +14,7 @@ import {
   isBitcoinStandardWalletStandardWallet,
   isBitcoinStatsConnectWalletStandardWallet,
 } from '../features';
+import { WalletConnectionType } from '../types/common';
 
 // Hook exposing state + connect action
 export function useConnect() {

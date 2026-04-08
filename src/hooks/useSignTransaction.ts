@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { signTransaction } from 'sats-connect-v3';
 import WalletV4, { BitcoinNetworkType, type InputToSign } from 'sats-connect-v4';
-import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import { BitcoinSignTransaction, type BitcoinSignTransactionFeature } from '../features/signTransaction';
+import { WalletConnectionType } from '../types/common';
 import { useConnect } from './useConnect';
 
 export function useSignTransaction() {
@@ -75,7 +75,9 @@ export function useSignTransaction() {
       const signInputs: Record<string, number[]> = {};
       for (const input of inputsToSign) {
         const addr = input.address;
-        if (!signInputs[addr]) signInputs[addr] = [];
+        if (!signInputs[addr]) {
+          signInputs[addr] = [];
+        }
         signInputs[addr].push(...input.signingIndexes);
       }
 
@@ -119,6 +121,12 @@ export function useSignTransaction() {
           throw new Error(`Unsupported connection type: ${selectedConnectionType}`);
       }
     },
-    [selectedAccount, selectedConnectionType, signTransactionWithStandard, signTransactionWithSatsConnectV3, signTransactionWithSatsConnectV4],
+    [
+      selectedAccount,
+      selectedConnectionType,
+      signTransactionWithStandard,
+      signTransactionWithSatsConnectV3,
+      signTransactionWithSatsConnectV4,
+    ],
   );
 }

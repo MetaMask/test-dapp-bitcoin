@@ -1,9 +1,9 @@
 import type { Wallet } from '@wallet-standard/base';
 import { type CSSProperties, useCallback, useEffect, useState } from 'react';
-import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { isBitcoinStandardWalletStandardWallet, isBitcoinStatsConnectWalletStandardWallet } from '../features';
 import { useConnect } from '../hooks/useConnect';
 import { dataTestIds } from '../test';
+import { WalletConnectionType } from '../types/common';
 
 // Add spinner animation keyframes to document
 const addSpinnerKeyframes = () => {
