@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add sats-connect v4 support alongside v3, allowing dynamic selection between both versions when connecting via Sats Connect
+
 ## [0.1.0]
 
 ### Changed
