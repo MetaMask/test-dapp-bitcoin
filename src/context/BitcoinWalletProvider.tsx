@@ -7,7 +7,8 @@ import { useEndpoint } from './EndpointProvider';
 // Enum for wallet connection types
 export enum WalletConnectionType {
   Standard = 'standard',
-  SatsConnect = 'satsConnect',
+  SatsConnectV3 = 'satsConnectV3',
+  SatsConnectV4 = 'satsConnectV4',
 }
 
 // State values required by user (no functions here)

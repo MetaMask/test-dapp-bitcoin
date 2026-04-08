@@ -39,8 +39,11 @@ export const Header: FC<HeaderProps> = () => {
       if (selectedConnectionType === WalletConnectionType.Standard) {
         return 'Standard';
       }
-      if (selectedConnectionType === WalletConnectionType.SatsConnect) {
-        return 'Sats Connect';
+      if (selectedConnectionType === WalletConnectionType.SatsConnectV3) {
+        return 'Sats Connect V3';
+      }
+      if (selectedConnectionType === WalletConnectionType.SatsConnectV4) {
+        return 'Sats Connect V4';
       }
     }
 

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { BitcoinNetworkType, type InputToSign, signTransaction } from 'sats-connect';
+import { signTransaction } from 'sats-connect-v3';
+import WalletV4, { BitcoinNetworkType, type InputToSign } from 'sats-connect-v4';
 import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import { BitcoinSignTransaction, type BitcoinSignTransactionFeature } from '../features/signTransaction';
@@ -43,7 +44,7 @@ export function useSignTransaction() {
     [selectedAccount, network, selectedWallet],
   );
 
-  const signTransactionWithSatsConnect = useCallback(
+  const signTransactionWithSatsConnectV3 = useCallback(
     async (psbtBase64: string, message: string, inputsToSign: InputToSign[] = [], broadcast?: boolean) => {
       if (!statsConnectProvider) {
         throw new Error('Sats Connect provider not available');
@@ -68,6 +69,35 @@ export function useSignTransaction() {
     [statsConnectProvider, network],
   );
 
+  const signTransactionWithSatsConnectV4 = useCallback(
+    async (psbtBase64: string, _message: string, inputsToSign: InputToSign[] = [], broadcast?: boolean) => {
+      // v4 uses signInputs: { [address]: signingIndexes[] } instead of inputsToSign array
+      const signInputs: Record<string, number[]> = {};
+      for (const input of inputsToSign) {
+        const addr = input.address;
+        if (!signInputs[addr]) signInputs[addr] = [];
+        signInputs[addr].push(...input.signingIndexes);
+      }
+
+      const response = await WalletV4.request('signPsbt', {
+        psbt: psbtBase64,
+        signInputs,
+        broadcast,
+      });
+
+      if (response.status === 'error') {
+        throw new Error(response.error.message);
+      }
+
+      const result = response.result as any;
+      return {
+        psbtBase64: result.psbt as string,
+        txId: result.txid as string | undefined,
+      };
+    },
+    [],
+  );
+
   return useCallback(
     async (psbtBase64: string, message: string, inputsToSign: InputToSign[] = []) => {
       if (!selectedAccount) {
@@ -81,12 +111,14 @@ export function useSignTransaction() {
       switch (selectedConnectionType) {
         case WalletConnectionType.Standard:
           return signTransactionWithStandard(psbtBase64, inputsToSign);
-        case WalletConnectionType.SatsConnect:
-          return signTransactionWithSatsConnect(psbtBase64, message, inputsToSign);
+        case WalletConnectionType.SatsConnectV3:
+          return signTransactionWithSatsConnectV3(psbtBase64, message, inputsToSign);
+        case WalletConnectionType.SatsConnectV4:
+          return signTransactionWithSatsConnectV4(psbtBase64, message, inputsToSign);
         default:
           throw new Error(`Unsupported connection type: ${selectedConnectionType}`);
       }
     },
-    [selectedAccount, selectedConnectionType, signTransactionWithStandard, signTransactionWithSatsConnect],
+    [selectedAccount, selectedConnectionType, signTransactionWithStandard, signTransactionWithSatsConnectV3, signTransactionWithSatsConnectV4],
   );
 }

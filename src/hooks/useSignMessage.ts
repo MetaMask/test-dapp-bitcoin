@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { BitcoinNetworkType, signMessage as satsSignMessage } from 'sats-connect';
+import { signMessage as satsSignMessage } from 'sats-connect-v3';
+import WalletV4, { BitcoinNetworkType } from 'sats-connect-v4';
 import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import { BitcoinSignMessage, type BitcoinSignMessageFeature } from '../features/signMessage';
@@ -40,7 +41,7 @@ export function useSignMessage() {
     [selectedWallet, selectedAccount],
   );
 
-  const signMessageWithSatsConnect = useCallback(
+  const signMessageWithSatsConnectV3 = useCallback(
     async (message: Uint8Array): Promise<string> => {
       if (!selectedAccount) {
         throw new Error('Wallet not connected');
@@ -67,6 +68,26 @@ export function useSignMessage() {
     [selectedAccount, statsConnectProvider, network],
   );
 
+  const signMessageWithSatsConnectV4 = useCallback(
+    async (message: Uint8Array): Promise<string> => {
+      if (!selectedAccount) {
+        throw new Error('Wallet not connected');
+      }
+
+      const response = await WalletV4.request('signMessage', {
+        address: selectedAccount.address,
+        message: Buffer.from(message).toString('utf8'),
+      });
+
+      if (response.status === 'error') {
+        throw new Error(response.error.message);
+      }
+
+      return (response.result as any).signature as string;
+    },
+    [selectedAccount],
+  );
+
   return useCallback(
     async (message: Uint8Array) => {
       if (!selectedAccount) {
@@ -80,12 +101,14 @@ export function useSignMessage() {
       switch (selectedConnectionType) {
         case WalletConnectionType.Standard:
           return signMessageWithStandard(message);
-        case WalletConnectionType.SatsConnect:
-          return signMessageWithSatsConnect(message);
+        case WalletConnectionType.SatsConnectV3:
+          return signMessageWithSatsConnectV3(message);
+        case WalletConnectionType.SatsConnectV4:
+          return signMessageWithSatsConnectV4(message);
         default:
           throw new Error(`Unsupported connection type: ${selectedConnectionType}`);
       }
     },
-    [selectedAccount, selectedConnectionType, signMessageWithStandard, signMessageWithSatsConnect],
+    [selectedAccount, selectedConnectionType, signMessageWithStandard, signMessageWithSatsConnectV3, signMessageWithSatsConnectV4],
   );
 }
