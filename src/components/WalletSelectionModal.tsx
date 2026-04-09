@@ -1,9 +1,9 @@
 import type { Wallet } from '@wallet-standard/base';
 import { type CSSProperties, useCallback, useEffect, useState } from 'react';
-import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { isBitcoinStandardWalletStandardWallet, isBitcoinStatsConnectWalletStandardWallet } from '../features';
 import { useConnect } from '../hooks/useConnect';
 import { dataTestIds } from '../test';
+import { WalletConnectionType } from '../types/common';
 
 // Add spinner animation keyframes to document
 const addSpinnerKeyframes = () => {
@@ -48,20 +48,16 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
 
   const handleWalletClick = useCallback(
     (wallet: Wallet) => {
-      if (isDualCompatible(wallet)) {
+      // Always expand when satsConnect is available (to choose v3 or v4)
+      if (isBitcoinStatsConnectWalletStandardWallet(wallet)) {
         setExpandedWallet(expandedWallet?.name === wallet.name ? undefined : wallet);
-      } else {
+      } else if (isBitcoinStandardWalletStandardWallet(wallet)) {
         setExpandedWallet(undefined);
-        // For single-compatible wallets, connect directly with the appropriate type
-        if (isBitcoinStandardWalletStandardWallet(wallet)) {
-          connectWithWallet(wallet, WalletConnectionType.Standard);
-        } else if (isBitcoinStatsConnectWalletStandardWallet(wallet)) {
-          connectWithWallet(wallet, WalletConnectionType.SatsConnect);
-        }
+        connectWithWallet(wallet, WalletConnectionType.Standard);
         onClose();
       }
     },
-    [expandedWallet, connectWithWallet, onClose, isDualCompatible],
+    [expandedWallet, connectWithWallet, onClose],
   );
 
   const handleTypeSelection = useCallback(
@@ -356,11 +352,29 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
                     {expandedWallet?.name === wallet.name && (
                       <div style={connectionTypeContainerStyle}>
                         <div style={connectionTypeButtonsStyle}>
+                          {isDualCompatible(wallet) && (
+                            <button
+                              data-testid={dataTestIds.testPage.walletSelectionModal.standardButton}
+                              type="button"
+                              style={connectionTypeButtonStyle}
+                              onClick={() => handleTypeSelection(wallet, WalletConnectionType.Standard)}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = '#3b82f6';
+                                e.currentTarget.style.color = '#ffffff';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = '#f8fafc';
+                                e.currentTarget.style.color = '#374151';
+                              }}
+                            >
+                              Standard
+                            </button>
+                          )}
                           <button
-                            data-testid={dataTestIds.testPage.walletSelectionModal.standardButton}
+                            data-testid={dataTestIds.testPage.walletSelectionModal.satsConnectV3Button}
                             type="button"
                             style={connectionTypeButtonStyle}
-                            onClick={() => handleTypeSelection(wallet, WalletConnectionType.Standard)}
+                            onClick={() => handleTypeSelection(wallet, WalletConnectionType.SatsConnectV3)}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = '#3b82f6';
                               e.currentTarget.style.color = '#ffffff';
@@ -370,13 +384,13 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
                               e.currentTarget.style.color = '#374151';
                             }}
                           >
-                            Standard
+                            Sats Connect V3
                           </button>
                           <button
-                            data-testid={dataTestIds.testPage.walletSelectionModal.satsConnectButton}
+                            data-testid={dataTestIds.testPage.walletSelectionModal.satsConnectV4Button}
                             type="button"
                             style={connectionTypeButtonStyle}
-                            onClick={() => handleTypeSelection(wallet, WalletConnectionType.SatsConnect)}
+                            onClick={() => handleTypeSelection(wallet, WalletConnectionType.SatsConnectV4)}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = '#3b82f6';
                               e.currentTarget.style.color = '#ffffff';
@@ -386,10 +400,11 @@ export function WalletSelectionModal({ isOpen, wallets, onClose, connectingWalle
                               e.currentTarget.style.color = '#374151';
                             }}
                           >
-                            Sats Connect
+                            Sats Connect V4
                           </button>
                           <button
                             type="button"
+                            style={connectionTypeButtonStyle}
                             onClick={() => setExpandedWallet(undefined)}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = '#3b82f6';

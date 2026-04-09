@@ -2,13 +2,8 @@ import { type Wallet, type WalletAccount, getWallets } from '@wallet-standard/co
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { isBitcoinWalletStandardWallet } from '../features/utils';
+import type { WalletConnectionType } from '../types/common';
 import { useEndpoint } from './EndpointProvider';
-
-// Enum for wallet connection types
-export enum WalletConnectionType {
-  Standard = 'standard',
-  SatsConnect = 'satsConnect',
-}
 
 // State values required by user (no functions here)
 export interface BitcoinWalletStateContextValue {

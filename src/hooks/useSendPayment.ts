@@ -1,11 +1,13 @@
 import { useCallback } from 'react';
-import { BitcoinNetworkType, sendBtcTransaction } from 'sats-connect';
-import { WalletConnectionType, useBitcoinWalletCtx } from '../context/BitcoinWalletProvider';
+import { sendBtcTransaction } from 'sats-connect-v3';
+import WalletV4, { BitcoinNetworkType } from 'sats-connect-v4';
+import { useBitcoinWalletCtx } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import {
   BitcoinSignAndSendTransaction,
   type BitcoinSignAndSendTransactionFeature,
 } from '../features/signAndSendTransaction';
+import { WalletConnectionType } from '../types/common';
 import { buildPSBT } from '../utils/psbtBuilder';
 import { useConnect } from './useConnect';
 
@@ -58,7 +60,7 @@ export function useSendPayment() {
     [selectedWallet, selectedAccount, network],
   );
 
-  const sendPaymentWithSatsConnect = useCallback(
+  const sendPaymentWithSatsConnectV3 = useCallback(
     async (to: string, amountSats: bigint) => {
       if (!selectedAccount) {
         throw new Error('Wallet not connected');
@@ -89,6 +91,25 @@ export function useSendPayment() {
     [selectedAccount, statsConnectProvider, network],
   );
 
+  const sendPaymentWithSatsConnectV4 = useCallback(
+    async (to: string, amountSats: bigint) => {
+      if (!selectedAccount) {
+        throw new Error('Wallet not connected');
+      }
+
+      const response = await WalletV4.request('sendTransfer', {
+        recipients: [{ address: to, amount: Number(amountSats) }],
+      });
+
+      if (response.status === 'error') {
+        throw new Error(response.error.message);
+      }
+
+      return (response.result as any).txid as string;
+    },
+    [selectedAccount],
+  );
+
   return useCallback(
     async (to: string, amountSats: bigint) => {
       if (!selectedAccount) {
@@ -102,13 +123,21 @@ export function useSendPayment() {
       switch (selectedConnectionType) {
         case WalletConnectionType.Standard:
           return sendPaymentWithStandard(to, amountSats);
-        case WalletConnectionType.SatsConnect:
-          return sendPaymentWithSatsConnect(to, amountSats);
+        case WalletConnectionType.SatsConnectV3:
+          return sendPaymentWithSatsConnectV3(to, amountSats);
+        case WalletConnectionType.SatsConnectV4:
+          return sendPaymentWithSatsConnectV4(to, amountSats);
         default:
           throw new Error(`Unsupported connection type: ${selectedConnectionType}`);
       }
     },
-    [selectedAccount, selectedConnectionType, sendPaymentWithStandard, sendPaymentWithSatsConnect],
+    [
+      selectedAccount,
+      selectedConnectionType,
+      sendPaymentWithStandard,
+      sendPaymentWithSatsConnectV3,
+      sendPaymentWithSatsConnectV4,
+    ],
   );
 }
 

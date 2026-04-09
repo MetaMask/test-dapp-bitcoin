@@ -1,6 +1,6 @@
 import type { Wallet } from '@wallet-standard/base';
 import { useCallback } from 'react';
-import type { WalletConnectionType } from '../context/BitcoinWalletProvider';
+import type { WalletConnectionType } from '../types/common';
 import { useConnect } from './useConnect';
 
 export function useWalletModal() {

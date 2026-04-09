@@ -47,7 +47,8 @@ export const dataTestIds = pathifyObject({
       walletsList: true,
       walletOption: true,
       standardButton: true,
-      satsConnectButton: true,
+      satsConnectV3Button: true,
+      satsConnectV4Button: true,
     },
     signMessage: {
       id: true,

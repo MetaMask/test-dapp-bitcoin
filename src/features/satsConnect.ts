@@ -1,4 +1,4 @@
-import type { BitcoinProvider } from 'sats-connect';
+import type { BitcoinProvider } from 'sats-connect-v4';
 
 export const BitcoinSatsConnect = 'sats-connect:';
 

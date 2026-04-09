@@ -1,9 +1,9 @@
 import type { FC } from 'react';
-import { WalletConnectionType } from '../context/BitcoinWalletProvider';
 import { useEndpoint } from '../context/EndpointProvider';
 import { isBitcoinStandardWalletStandardWallet, isBitcoinStatsConnectWalletStandardWallet } from '../features';
 import { useConnect } from '../hooks/useConnect';
 import { dataTestIds } from '../test';
+import { WalletConnectionType } from '../types/common';
 import { Account } from './Account';
 import { WalletSelectionModal } from './WalletSelectionModal';
 
@@ -39,8 +39,11 @@ export const Header: FC<HeaderProps> = () => {
       if (selectedConnectionType === WalletConnectionType.Standard) {
         return 'Standard';
       }
-      if (selectedConnectionType === WalletConnectionType.SatsConnect) {
-        return 'Sats Connect';
+      if (selectedConnectionType === WalletConnectionType.SatsConnectV3) {
+        return 'Sats Connect V3';
+      }
+      if (selectedConnectionType === WalletConnectionType.SatsConnectV4) {
+        return 'Sats Connect V4';
       }
     }
 
