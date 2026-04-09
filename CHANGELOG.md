@@ -18,9 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feat/disconnect ([#10](https://github.com/MetaMask/test-dapp-bitcoin/pull/10))
 - feat: sign transaction with standard ([#9](https://github.com/MetaMask/test-dapp-bitcoin/pull/9))
 - Feat send payment standard ([#8](https://github.com/MetaMask/test-dapp-bitcoin/pull/8))
-
-### Added
-
 - Add sats-connect v4 support alongside v3, allowing dynamic selection between both versions when connecting via Sats Connect
 
 ## [0.1.0]
