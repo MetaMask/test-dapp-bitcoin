@@ -23,7 +23,8 @@ export declare const dataTestIds: Pathify<{
             readonly walletsList: true;
             readonly walletOption: true;
             readonly standardButton: true;
-            readonly satsConnectButton: true;
+            readonly satsConnectV3Button: true;
+            readonly satsConnectV4Button: true;
         };
         readonly signMessage: {
             readonly id: true;
