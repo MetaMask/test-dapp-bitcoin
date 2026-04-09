@@ -16,6 +16,33 @@ import {
 } from '../features';
 import { WalletConnectionType } from '../types/common';
 
+const CONNECTION_STORAGE_KEY = 'btc_connection';
+
+export type SavedConnection = {
+  walletName: string;
+  connectionType: WalletConnectionType;
+};
+
+export function saveConnection(connection: SavedConnection): void {
+  localStorage.setItem(CONNECTION_STORAGE_KEY, JSON.stringify(connection));
+}
+
+export function clearSavedConnection(): void {
+  localStorage.removeItem(CONNECTION_STORAGE_KEY);
+}
+
+export function getSavedConnection(): SavedConnection | null {
+  const raw = localStorage.getItem(CONNECTION_STORAGE_KEY);
+  if (!raw) {
+    return null;
+  }
+  try {
+    return JSON.parse(raw) as SavedConnection;
+  } catch {
+    return null;
+  }
+}
+
 // Hook exposing state + connect action
 export function useConnect() {
   const { network } = useEndpoint();
@@ -64,12 +91,13 @@ export function useConnect() {
       throw new Error('No wallet selected');
     }
 
-    // Clean up v4 adapter injection
+    // Clean up v4 provider injection
     if (state.selectedConnectionType === WalletConnectionType.SatsConnectV4) {
       delete (window as any)[SATS_CONNECT_V4_PROVIDER_KEY];
       (WalletV4 as any).providerId = undefined;
     }
 
+    clearSavedConnection();
     resetLocalState();
 
     if (isBitcoinStandardWalletStandardWallet(wallet)) {
@@ -158,7 +186,37 @@ export function useConnect() {
     ],
   );
 
-  // Stable ID used to register the wallet-standard provider in v4's adapter registry.
+  const onChange = useCallback(
+    (event: any) => {
+      if (event.accounts.length > 0) {
+        setAccounts(event.accounts);
+        setSelectedAccount(event.accounts[0]);
+      } else {
+        clearSavedConnection();
+        resetLocalState();
+      }
+    },
+    [setAccounts, setSelectedAccount, resetLocalState],
+  );
+
+  const onChangeAccountSatsConnect = useCallback(
+    (event: any) => {
+      if (event.addresses) {
+        const list = (event.addresses || []).map((a: any) => ({ address: a.address, purpose: a.purpose }));
+        setAccounts(list);
+        const derived = list.find((a: any) => a.purpose === 'payment') || list[0] || null;
+        setSelectedAccount(derived);
+      }
+    },
+    [setAccounts, setSelectedAccount],
+  );
+
+  const onDisconnectSatsConnect = useCallback(() => {
+    clearSavedConnection();
+    resetLocalState();
+  }, [resetLocalState]);
+
+  // Stable ID used to expose the wallet-standard provider on window for sats-connect v4.
   const SATS_CONNECT_V4_PROVIDER_KEY = '__walletStandardProvider';
 
   const connectWithSatsConnectV4Wallet = useCallback(
@@ -176,6 +234,12 @@ export function useConnect() {
       // this is the native mechanism the library was designed for.
       (window as any)[SATS_CONNECT_V4_PROVIDER_KEY] = walletProvider;
       (WalletV4 as any).providerId = SATS_CONNECT_V4_PROVIDER_KEY;
+
+      // WalletV4.addListener routes through defaultAdapters[providerId], which only knows about
+      // Xverse/Unisat/Fordefi — our custom key has no adapter entry, so it silently no-ops.
+      // Call the provider's addListener directly instead.
+      walletProvider.addListener({ eventName: 'accountChange', cb: onChangeAccountSatsConnect });
+      walletProvider.addListener({ eventName: 'disconnect', cb: onDisconnectSatsConnect });
 
       const response = await WalletV4.request('getAddresses', {
         purposes: [AddressPurpose.Payment],
@@ -196,7 +260,14 @@ export function useConnect() {
       setSelectedWallet(wallet);
       setSelectedConnectionType(WalletConnectionType.SatsConnectV4);
     },
-    [setAccounts, setSelectedAccount, setSelectedWallet, setSelectedConnectionType],
+    [
+      setAccounts,
+      setSelectedAccount,
+      setSelectedWallet,
+      setSelectedConnectionType,
+      onChangeAccountSatsConnect,
+      onDisconnectSatsConnect,
+    ],
   );
 
   const connectWithWallet = useCallback(
@@ -222,7 +293,14 @@ export function useConnect() {
           throw new Error('Invalid connection type');
         }
 
-        // Connection successful - close modal
+        // Connection successful - persist and close modal
+        // Resolve the actual connection type used when connectionType was undefined
+        const resolvedType =
+          connectionType ??
+          (isBitcoinStandardWalletStandardWallet(wallet)
+            ? WalletConnectionType.Standard
+            : WalletConnectionType.SatsConnectV3);
+        saveConnection({ walletName: wallet.name, connectionType: resolvedType });
         setIsModalOpen(false);
         setConnectingWallet(undefined);
       } catch (error) {
@@ -234,34 +312,6 @@ export function useConnect() {
     },
     [connectWithStandardWallet, connectWithSatsConnectV3Wallet, connectWithSatsConnectV4Wallet],
   );
-
-  const onChange = useCallback(
-    (event: any) => {
-      if (event.accounts.length > 0) {
-        setAccounts(event.accounts);
-        setSelectedAccount(event.accounts[0]);
-      } else {
-        resetLocalState();
-      }
-    },
-    [setAccounts, setSelectedAccount, resetLocalState],
-  );
-
-  const onChangeAccountSatsConnect = useCallback(
-    (event: any) => {
-      if (event.addresses) {
-        const list = (event.addresses || []).map((a: any) => ({ address: a.address, purpose: a.purpose }));
-        setAccounts(list);
-        const derived = list.find((a: any) => a.purpose === 'payment') || list[0] || null;
-        setSelectedAccount(derived);
-      }
-    },
-    [setAccounts, setSelectedAccount],
-  );
-
-  const onDisconnectSatsConnect = useCallback(() => {
-    resetLocalState();
-  }, [resetLocalState]);
 
   return {
     ...state,

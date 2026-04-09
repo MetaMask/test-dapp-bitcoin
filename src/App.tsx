@@ -1,9 +1,12 @@
 import type { FC } from 'react';
 import { BitcoinWalletProvider } from './context/BitcoinWalletProvider';
 import { EndpointProvider } from './context/EndpointProvider';
+import { useAutoReconnect } from './hooks/useAutoReconnect';
 import { TestPage } from './pages/TestPage';
 
 const AppContent: FC = () => {
+  useAutoReconnect();
+
   return (
     <div
       style={{
