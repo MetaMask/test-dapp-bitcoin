@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0]
 
-### Uncategorized
+### Added
 
 - feat: add reconnect feature ([#16](https://github.com/MetaMask/test-dapp-bitcoin/pull/16))
 - Add satsconnect v4 ([#15](https://github.com/MetaMask/test-dapp-bitcoin/pull/15))
