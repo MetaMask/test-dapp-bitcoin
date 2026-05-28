@@ -53,6 +53,8 @@
     "@metamask/multichain-api-client": "^0.10.1",
     "@wallet-standard/base": "^1.1.0",
     "@wallet-standard/core": "^1.1.1",
+    "@wallet-standard/features": "^1.1.0",
+    "@wallet-standard/wallet": "^1.1.0",
     "bitcoinjs-lib": "^7.0.0",
     "buffer": "^6.0.3",
     "react": "^18.3.1",
