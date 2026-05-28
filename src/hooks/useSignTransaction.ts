@@ -6,12 +6,19 @@ import { BitcoinSignTransaction, type BitcoinSignTransactionFeature } from '../f
 import { WalletConnectionType } from '../types/common';
 import { useConnect } from './useConnect';
 
+export type SignTransactionOptions = {
+  /** When true, ask the wallet (currently MetaMask snap only) to auto-select inputs and compute fees. */
+  fill?: boolean;
+  /** Explicit fee rate in sat/vB. Skip the wallet's fee-estimation call when set. */
+  feeRate?: number;
+};
+
 export function useSignTransaction() {
   const { network } = useEndpoint();
   const { selectedAccount, statsConnectProvider, selectedConnectionType, selectedWallet } = useConnect();
 
   const signTransactionWithStandard = useCallback(
-    async (psbtBase64: string, inputsToSign: InputToSign[] = []) => {
+    async (psbtBase64: string, inputsToSign: InputToSign[] = [], opts?: SignTransactionOptions) => {
       if (!selectedWallet) {
         throw new Error('Wallet not connected');
       }
@@ -26,6 +33,8 @@ export function useSignTransaction() {
         throw new Error('Wallet does not support message signing');
       }
 
+      // Optional MetaMask-snap-specific extensions on the standard input.
+      // Wallets that don't recognise them ignore them.
       const result = await signTransactionFeature.signTransaction({
         psbt: Buffer.from(psbtBase64, 'base64'),
         inputsToSign: inputsToSign.map((input) => ({
@@ -34,7 +43,8 @@ export function useSignTransaction() {
           sigHash: 'ALL',
         })),
         chain: network,
-      });
+        ...(opts ?? {}),
+      } as Parameters<typeof signTransactionFeature.signTransaction>[0]);
 
       return {
         psbtBase64: Buffer.from(result[0].signedPsbt.buffer).toString('base64'),
@@ -101,7 +111,7 @@ export function useSignTransaction() {
   );
 
   return useCallback(
-    async (psbtBase64: string, message: string, inputsToSign: InputToSign[] = []) => {
+    async (psbtBase64: string, message: string, inputsToSign: InputToSign[] = [], opts?: SignTransactionOptions) => {
       if (!selectedAccount) {
         throw new Error('Wallet not connected');
       }
@@ -112,7 +122,7 @@ export function useSignTransaction() {
 
       switch (selectedConnectionType) {
         case WalletConnectionType.Standard:
-          return signTransactionWithStandard(psbtBase64, inputsToSign);
+          return signTransactionWithStandard(psbtBase64, inputsToSign, opts);
         case WalletConnectionType.SatsConnectV3:
           return signTransactionWithSatsConnectV3(psbtBase64, message, inputsToSign);
         case WalletConnectionType.SatsConnectV4:

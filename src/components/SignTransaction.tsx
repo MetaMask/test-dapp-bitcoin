@@ -11,6 +11,8 @@ export const SignTransaction: FC = () => {
   const { selectedAccount } = useConnect();
   const [signedTransaction, setSignedTransaction] = useState<{ psbtBase64: string; txId?: string } | null>(null);
   const [psbtBase64, setPsbtBase64] = useState<string>('');
+  const [fill, setFill] = useState<boolean>(false);
+  const [feeRateInput, setFeeRateInput] = useState<string>('');
   const [loading, setLoading] = useState(false);
 
   /**
@@ -18,6 +20,14 @@ export const SignTransaction: FC = () => {
    */
   const handlePsbtChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPsbtBase64(event.target.value);
+  }, []);
+
+  const handleFillChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setFill(event.target.checked);
+  }, []);
+
+  const handleFeeRateChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setFeeRateInput(event.target.value);
   }, []);
 
   /**
@@ -36,12 +46,18 @@ export const SignTransaction: FC = () => {
       // For basic PSBTs, we'll try to sign all inputs with the connected address
       // This is a simplified approach for testing - in production you'd want more sophisticated input selection
       const inputsToSign = [{ address: selectedAccount.address, signingIndexes: [0] }];
-      const result = await signTransaction(psbtBase64.trim(), SIGN_TRANSACTION_MESSAGE, inputsToSign);
+      const trimmedFeeRate = feeRateInput.trim();
+      const parsedFeeRate = trimmedFeeRate ? Number(trimmedFeeRate) : undefined;
+      const feeRate = parsedFeeRate !== undefined && Number.isFinite(parsedFeeRate) ? parsedFeeRate : undefined;
+      const result = await signTransaction(psbtBase64.trim(), SIGN_TRANSACTION_MESSAGE, inputsToSign, {
+        fill,
+        feeRate,
+      });
       setSignedTransaction(result);
     } finally {
       setLoading(false);
     }
-  }, [selectedAccount, signTransaction, psbtBase64]);
+  }, [selectedAccount, signTransaction, psbtBase64, fill, feeRateInput]);
 
   return (
     <div data-testid={dataTestIds.testPage.signTransaction?.id}>
@@ -61,6 +77,26 @@ export const SignTransaction: FC = () => {
             fontSize: '0.8rem',
           }}
         />
+      </div>
+
+      {/* MetaMask snap-bitcoin-wallet options (ignored by other wallets) */}
+      <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <input type="checkbox" checked={fill} onChange={handleFillChange} />
+          Auto-fill inputs (snap selects UTXOs)
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          Fee rate (sat/vB)
+          <input
+            type="number"
+            min="1"
+            step="0.1"
+            value={feeRateInput}
+            onChange={handleFeeRateChange}
+            placeholder="auto"
+            style={{ width: '6rem', padding: '0.3rem' }}
+          />
+        </label>
       </div>
 
       <Button

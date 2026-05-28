@@ -537,6 +537,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@metamask/multichain-api-client@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "@metamask/multichain-api-client@npm:0.10.1"
+  checksum: 10/adedb90f433cd619eee54943197dc32eb30e461173e928ea698ec70bf8c6780d9ac0bb9b12a22a17f984170841c071d228aa49e6988d5060e8a30e99c433a8f5
+  languageName: node
+  linkType: hard
+
 "@metamask/test-dapp-bitcoin@workspace:.":
   version: 0.0.0-use.local
   resolution: "@metamask/test-dapp-bitcoin@workspace:."
@@ -545,6 +552,7 @@ __metadata:
     "@lavamoat/allow-scripts": "npm:^3.0.4"
     "@lavamoat/preinstall-always-fail": "npm:^2.0.0"
     "@metamask/auto-changelog": "npm:^5.0.1"
+    "@metamask/multichain-api-client": "npm:^0.10.1"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/react": "npm:^16.3.0"
     "@types/bs58": "npm:^4.0.4"
