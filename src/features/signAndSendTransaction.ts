@@ -58,4 +58,7 @@ export interface BitcoinSignAndSendTransactionInput extends BitcoinSignTransacti
 export interface BitcoinSignAndSendTransactionOutput {
   /** Transaction ID (transaction hash). */
   readonly txId: string;
+
+  /** Whether the transaction ID may be rewritten before confirmation (malleability). */
+  readonly canBeMalleable?: boolean;
 }

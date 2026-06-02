@@ -69,6 +69,7 @@ export const dataTestIds = pathifyObject({
       amout: true,
       sendTransaction: true,
       txId: true,
+      canBeMalleable: true,
     },
   },
 } as const);

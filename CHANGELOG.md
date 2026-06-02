@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Surface the `canBeMalleable` flag returned by the Bitcoin snap on send responses, displayed after a payment when the wallet returns it (Wallet Standard and Sats Connect v4 paths)
+
 ## [0.2.0]
 
 ### Added

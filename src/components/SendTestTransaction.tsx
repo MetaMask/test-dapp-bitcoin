@@ -10,6 +10,7 @@ export const SendTestTransaction: FC = () => {
   const { selectedAccount, connected } = useConnect();
   const address = selectedAccount?.address;
   const [transactionHash, setTransactionHash] = useState<string | undefined>();
+  const [canBeMalleable, setCanBeMalleable] = useState<boolean | undefined>();
   const [toAddress, setToAddress] = useState<string>('');
   const [amount, setAmount] = useState<number>(1000); // sats
   const [loading, setLoading] = useState(false);
@@ -37,8 +38,9 @@ export const SendTestTransaction: FC = () => {
     }
     setLoading(true);
     try {
-      const txId = await sendPayment(toAddress, BigInt(amount));
+      const { txId, canBeMalleable: malleable } = await sendPayment(toAddress, BigInt(amount));
       setTransactionHash(txId);
+      setCanBeMalleable(malleable);
     } finally {
       setLoading(false);
     }
@@ -81,6 +83,11 @@ export const SendTestTransaction: FC = () => {
         <div style={{ marginTop: '1rem' }}>
           <h3>Transaction</h3>
           <TransactionHash hash={transactionHash} dataTestId={dataTestIds.testPage.sendTransaction.txId} />
+          {canBeMalleable !== undefined && (
+            <p data-testid={dataTestIds.testPage.sendTransaction.canBeMalleable} style={{ marginTop: '0.5rem' }}>
+              Can be malleable: {String(canBeMalleable)}
+            </p>
+          )}
         </div>
       )}
     </div>

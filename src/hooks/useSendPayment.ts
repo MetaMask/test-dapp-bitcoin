@@ -11,13 +11,18 @@ import { WalletConnectionType } from '../types/common';
 import { buildPSBT } from '../utils/psbtBuilder';
 import { useConnect } from './useConnect';
 
+export interface SendPaymentResult {
+  txId: string;
+  canBeMalleable?: boolean;
+}
+
 export function useSendPayment() {
   const { network } = useEndpoint();
   const { selectedAccount, statsConnectProvider } = useBitcoinWalletCtx();
   const { selectedConnectionType, selectedWallet } = useConnect();
 
   const sendPaymentWithStandard = useCallback(
-    async (to: string, amountSats: bigint) => {
+    async (to: string, amountSats: bigint): Promise<SendPaymentResult> => {
       if (!selectedWallet) {
         throw new Error('Wallet not connected');
       }
@@ -55,13 +60,13 @@ export function useSendPayment() {
         throw new Error('Transaction failed: no transaction ID returned');
       }
 
-      return result[0].txId;
+      return { txId: result[0].txId, canBeMalleable: result[0].canBeMalleable };
     },
     [selectedWallet, selectedAccount, network],
   );
 
   const sendPaymentWithSatsConnectV3 = useCallback(
-    async (to: string, amountSats: bigint) => {
+    async (to: string, amountSats: bigint): Promise<SendPaymentResult> => {
       if (!selectedAccount) {
         throw new Error('Wallet not connected');
       }
@@ -69,7 +74,12 @@ export function useSendPayment() {
         throw new Error('Sats Connect provider not available');
       }
       const networkType = network === 'bitcoin:mainnet' ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet;
-      const res = await new Promise((resolve, reject) =>
+      type SatsConnectV3Response = {
+        txId?: string;
+        canBeMalleable?: boolean;
+        result?: { txId?: string; canBeMalleable?: boolean };
+      };
+      return new Promise<SendPaymentResult>((resolve, reject) =>
         sendBtcTransaction({
           getProvider: async () => statsConnectProvider,
           payload: {
@@ -82,17 +92,24 @@ export function useSendPayment() {
             ],
             senderAddress: selectedAccount.address,
           },
-          onFinish: (r: any) => resolve(r?.result?.txId || r?.txId),
+          onFinish: (response) => {
+            const r = response as unknown as SatsConnectV3Response;
+            const txId = r?.result?.txId ?? r?.txId ?? (typeof response === 'string' ? response : undefined);
+            if (!txId) {
+              reject(new Error('Transaction failed: no transaction ID returned'));
+              return;
+            }
+            resolve({ txId, canBeMalleable: r?.result?.canBeMalleable ?? r?.canBeMalleable });
+          },
           onCancel: () => reject(new Error('Transaction cancelled')),
         }),
       );
-      return res as string;
     },
     [selectedAccount, statsConnectProvider, network],
   );
 
   const sendPaymentWithSatsConnectV4 = useCallback(
-    async (to: string, amountSats: bigint) => {
+    async (to: string, amountSats: bigint): Promise<SendPaymentResult> => {
       if (!selectedAccount) {
         throw new Error('Wallet not connected');
       }
@@ -105,7 +122,8 @@ export function useSendPayment() {
         throw new Error(response.error.message);
       }
 
-      return (response.result as any).txid as string;
+      const result = response.result as { txid: string; canBeMalleable?: boolean };
+      return { txId: result.txid, canBeMalleable: result.canBeMalleable };
     },
     [selectedAccount],
   );
