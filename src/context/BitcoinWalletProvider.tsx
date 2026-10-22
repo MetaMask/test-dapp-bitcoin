@@ -36,9 +36,19 @@ export const BitcoinWalletProvider = ({ children }: { children: ReactNode }) => 
   const connected = !!selectedWallet;
 
   useEffect(() => {
-    const detectedWallets = getWallets().get();
-    console.log('Detected wallets:', detectedWallets);
-    setWallets(detectedWallets.filter((w: Wallet) => isBitcoinWalletStandardWallet(w)));
+    const walletsRegistry = getWallets();
+    const updateWallets = () => {
+      setWallets(walletsRegistry.get().filter((w: Wallet) => isBitcoinWalletStandardWallet(w)));
+    };
+
+    updateWallets();
+    const unsubscribeRegister = walletsRegistry.on('register', updateWallets);
+    const unsubscribeUnregister = walletsRegistry.on('unregister', updateWallets);
+
+    return () => {
+      unsubscribeRegister();
+      unsubscribeUnregister();
+    };
   }, []);
 
   const stateValue = useMemo<BitcoinWalletStateContextValue>(

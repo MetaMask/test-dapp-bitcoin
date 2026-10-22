@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useEndpoint } from '../context/EndpointProvider';
 import { isBitcoinStandardWalletStandardWallet, isBitcoinStatsConnectWalletStandardWallet } from '../features';
 import { useConnect } from '../hooks/useConnect';
+import { useMetaMaskReady } from '../hooks/useMetaMaskReady';
 import { dataTestIds } from '../test';
 import { WalletConnectionType } from '../types/common';
 import { Account } from './Account';
@@ -27,6 +28,7 @@ export const Header: FC<HeaderProps> = () => {
     closeModal,
     connectingWallet,
   } = useConnect();
+  const isMetaMaskReady = useMetaMaskReady();
   const { network, setNetwork } = useEndpoint();
 
   const getWalletFeatureLabel = (wallet: any): string => {
@@ -96,6 +98,10 @@ export const Header: FC<HeaderProps> = () => {
         <div data-testid={dataTestIds.testPage.header.connectionStatus}>
           {connected ? 'Connected' : 'Not connected'}
         </div>
+      </div>
+      <div style={{ wordWrap: 'break-word' }}>
+        <strong>MetaMask:</strong>
+        <div data-testid={dataTestIds.testPage.header.metamaskReady}>{isMetaMaskReady ? 'ready' : 'not-ready'}</div>
       </div>
       <div style={{ wordWrap: 'break-word' }}>
         <strong>Account:</strong>
