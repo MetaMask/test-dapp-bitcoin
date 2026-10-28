@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Expose MetaMask readiness in the test dapp header ([#21](https://github.com/MetaMask/test-dapp-bitcoin/pull/21))
+
 ## [0.2.0]
 
 ### Added
