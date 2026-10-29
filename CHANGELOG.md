@@ -9,10 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0]
 
-### Uncategorized
-
-- chore: migrate npm publishing to trusted publishing ([#20](https://github.com/MetaMask/test-dapp-bitcoin/pull/20))
-
 ### Added
 
 - Expose MetaMask readiness in the test dapp header ([#21](https://github.com/MetaMask/test-dapp-bitcoin/pull/21))
