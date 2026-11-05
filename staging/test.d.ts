@@ -13,6 +13,7 @@ export declare const dataTestIds: Pathify<{
             readonly disconnect: true;
             readonly account: true;
             readonly connectionStatus: true;
+            readonly metamaskReady: true;
             readonly networks: {
                 readonly mainnet: true;
                 readonly testnet: true;

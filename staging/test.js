@@ -32,6 +32,7 @@ exports.dataTestIds = pathifyObject({
             disconnect: true,
             account: true,
             connectionStatus: true,
+            metamaskReady: true,
             networks: {
                 mainnet: true,
                 testnet: true,
